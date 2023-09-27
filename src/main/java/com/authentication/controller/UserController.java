@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Api("Handle User related actions")
-@RequestMapping("/api/user")
+@RequestMapping("/api/auth/user")
 public class UserController {
 
     @Autowired
