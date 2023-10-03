@@ -37,7 +37,7 @@ public class OtpController {
 
 //        SignupUser signupUser1 = this.signupService.createUserDetail(signupUser);
 
-        return this.otpService.generateOtp(otpRequest.getMobile(),otpRequest.getName(),otpRequest.getPassword());
+        return this.otpService.generateOtp(otpRequest.getEmail(),otpRequest.getName(),otpRequest.getPassword());
     }
 
 }

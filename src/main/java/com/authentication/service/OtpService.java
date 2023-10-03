@@ -8,5 +8,5 @@ public interface OtpService {
 
     OtpResponse generateOtp(String mobile, String name,String password);
 
-    OTP findOtpByMobileAndOtpCode(String mobile, String otp);
+    OTP findOtpByEmailAndOtpCode(String mobile, String otp);
 }

@@ -20,4 +20,6 @@ public class AuthenticationServiceApplication {
 	public Principal getPrincipal(Principal principal){
 		return principal;
 	}
+
+
 }

@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 public class OtpResponse {
 
-    private String mobile;
+    private String email;
     private String otp;
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface OtpRepository extends JpaRepository<OTP,Long> {
 
-    Optional<OTP> findByMobileContaining(String mobile);
+    Optional<OTP> findByEmailContaining(String email);
 
-    OTP findByMobileContainingAndOtpCode(String mobile, String otp);
+    OTP findByEmailContainingAndOtpCode(String email, String otp);
 }

@@ -32,18 +32,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> signupUser(SignupRequest signupRequest) {
-        OTP otp = this.otpService.findOtpByMobileAndOtpCode(signupRequest.getMobile(), signupRequest.getOtp());
+        OTP otp = this.otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
 
         if (otp == null)
             return new ResponseEntity<String>().badRequest("Enter a valid OTP !!");
 
-        User user = this.userRepository.findByMobile(signupRequest.getMobile()).orElse(null);
+        User user = this.userRepository.findByMobile(signupRequest.getEmail()).orElse(null);
         if (user != null)
             return new ResponseEntity<String>().badRequest("Error : User Already Exist !!");
 
         User newUser = new User();
         newUser.setId(0L);
-        newUser.setMobile(signupRequest.getMobile());
+        newUser.setMobile(signupRequest.getEmail());
         newUser.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
         newUser.setResourceType("In-House");
         newUser.setCreatedAt(new Date());
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> createUser(UserRequest userRequest) {
-        OTP otp = this.otpService.findOtpByMobileAndOtpCode(userRequest.getMobile(), userRequest.getOtp());
+        OTP otp = this.otpService.findOtpByEmailAndOtpCode(userRequest.getMobile(), userRequest.getOtp());
 
         if (otp == null)
             return new ResponseEntity<String>().badRequest("Enter a valid OTP !!");

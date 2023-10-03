@@ -27,6 +27,8 @@ public class OTP {
     @Size(min = 10,max = 15,message = "Mobile length should be 10-15 digits.")
     private String mobile;
 
+    private String email;
+
     @Column(name = "otp_code")
     private String otpCode;
 

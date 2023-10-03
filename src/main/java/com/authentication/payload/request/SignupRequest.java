@@ -13,8 +13,11 @@ import java.util.List;
 public class SignupRequest {
 
     private String name;
-    private String mobile;
+
+    private String email;
+
     private String otp;
+
     private String password;
 
     List<String> roleList;

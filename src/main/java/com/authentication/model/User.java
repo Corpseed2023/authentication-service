@@ -29,7 +29,10 @@ public class  User {
 	
 	@Column(name = "last_name")
 	private String lastName;
-	
+
+	@NotBlank
+	@NotEmpty
+	@NotNull
 	private String email;
 	
 	@Size(min = 10,max = 13,message = "Mobile length should be 10 to 13 digits..")
@@ -40,8 +43,8 @@ public class  User {
 	private String mobile;
 	
 	@Size(min = 6,message = "Password length should be minimum 6.")
-	@NotNull(message = "Password You Can't be null !!")
-	@NotBlank(message = "Please enter user password !!")
+//	@NotNull(message = "Password You Can't be null !!")
+//	@NotBlank(message = "Please enter user password !!")
 	private String password;
 	
 	private String designation;

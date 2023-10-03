@@ -10,7 +10,7 @@ import lombok.*;
 @Data
 public class OtpRequest {
 
-    private String mobile;
+    private String email;
 
     private String name;
 
