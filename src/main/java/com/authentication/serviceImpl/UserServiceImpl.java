@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         if (otp == null)
             return new ResponseEntity<String>().badRequest("Enter a valid OTP !!");
 
-        User user = this.userRepository.findByMobile(signupRequest.getEmail()).orElse(null);
+        User user = this.userRepository.findByEmail(signupRequest.getEmail()).orElse(null);
         if (user != null)
             return new ResponseEntity<String>().badRequest("Error : User Already Exist !!");
 
@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
         newUser.setCreatedAt(new Date());
         newUser.setUpdatedAt(new Date());
         newUser.setEnable(true);
+        newUser.setEmail(signupRequest.getEmail());
 
         newUser.setRoles(userRoleData(signupRequest.getRoleList()));
 

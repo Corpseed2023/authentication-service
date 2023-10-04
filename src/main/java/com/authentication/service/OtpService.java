@@ -9,4 +9,7 @@ public interface OtpService {
     OtpResponse generateOtp(String mobile, String name,String password);
 
     OTP findOtpByEmailAndOtpCode(String mobile, String otp);
+
+    void sendOtpOnEmail(String email, String otp, String name);
+
 }

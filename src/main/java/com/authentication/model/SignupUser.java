@@ -30,8 +30,8 @@ public class SignupUser {
     @NotBlank
     private String email;
 
-    @NotNull
-    @NotBlank
+//    @NotNull
+//    @NotBlank
     private String mobile;
 
     @NotNull

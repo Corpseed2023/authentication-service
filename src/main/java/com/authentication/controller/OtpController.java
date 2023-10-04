@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,12 +33,25 @@ public class OtpController {
             @ApiResponse(code = 500,message = "Something Went-Wrong"),
             @ApiResponse(code = 400,message = "Bad Request")
     })
-    @PostMapping()
-    public OtpResponse generateOtp(@RequestBody OtpRequest otpRequest){
+//    @PostMapping("/generateOTP")
+//    public OtpResponse generateOtp(@RequestBody OtpRequest otpRequest){
+//
+////        SignupUser signupUser1 = this.signupService.createUserDetail(signupUser);
+//
+//        return this.otpService.generateOtp(otpRequest.getEmail(),otpRequest.getName(),otpRequest.getPassword());
+//    }
 
-//        SignupUser signupUser1 = this.signupService.createUserDetail(signupUser);
+    @PostMapping("/generateOTP")
+    public OtpResponse generateOtp(@RequestBody OtpRequest otpRequest, Model model) {
+        OtpResponse otpResponse = this.otpService.generateOtp(otpRequest.getEmail(), otpRequest.getName(), otpRequest.getPassword());
 
-        return this.otpService.generateOtp(otpRequest.getEmail(),otpRequest.getName(),otpRequest.getPassword());
+        if (otpResponse != null) {
+//            model.addAttribute("otp", otpResponse.getOtp());
+//            model.addAttribute("name", otpRequest.getName());
+            otpService.sendOtpOnEmail(otpRequest.getEmail(), otpResponse.getOtp(), otpRequest.getName());
+        }
+
+        return otpResponse;
     }
 
 }
