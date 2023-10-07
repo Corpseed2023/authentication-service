@@ -61,10 +61,13 @@ public class  User {
 	@Comment(value = "1 : Active, 0 : Inactive")
 	private boolean isEnable;
 
+	private int otp;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(  name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Roles> roles;
+
 
 }

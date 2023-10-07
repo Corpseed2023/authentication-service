@@ -2,6 +2,7 @@ package com.authentication.serviceImpl;
 
 import com.authentication.model.OTP;
 import com.authentication.payload.request.OtpResponse;
+import com.authentication.payload.response.ResponseEntity;
 import com.authentication.repository.OtpRepository;
 import com.authentication.service.OtpService;
 import com.authentication.utils.CommonUtil;
@@ -64,9 +65,10 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public OtpResponse generateOtp(String email, String name, String password) {
-        String otpCode = CommonUtil.generateOTP(6);
 
         Optional<OTP> existingOtpOptional = this.otpRepository.findByEmailContaining(email);
+
+        String otpCode = CommonUtil.generateOTP(6);
 
         if (existingOtpOptional.isPresent()) {
 

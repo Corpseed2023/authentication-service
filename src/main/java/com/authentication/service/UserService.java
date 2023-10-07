@@ -9,4 +9,11 @@ public interface UserService {
     ResponseEntity<?> signupUser(SignupRequest signupRequest);
 
     ResponseEntity createUser(UserRequest userRequest);
+
+    ResponseEntity<?> checkUserExistanceAndSendOTP(String email);
+
+
+    boolean verifyOTP(String email, Integer otp);
+
+    void resetPassword(String email, String newPassword);
 }

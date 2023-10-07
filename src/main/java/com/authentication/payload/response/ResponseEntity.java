@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ResponseEntity<T> {
 
-  private HttpStatus status;
+  private static HttpStatus status;
   private int statusCode;
   private String message;
   private T body;
@@ -88,6 +88,9 @@ public class ResponseEntity<T> {
     setMessage(message);
     return this;
   }
+
+
+
 
   public HttpStatus getStatus() {
     return status;

@@ -1,5 +1,6 @@
 package com.authentication.serviceImpl;
 
+import com.authentication.exception.UserNotFoundException;
 import com.authentication.model.OTP;
 import com.authentication.model.Roles;
 import com.authentication.model.User;
@@ -13,6 +14,7 @@ import com.authentication.service.OtpService;
 import com.authentication.service.UserService;
 import com.authentication.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
 
     @Autowired
     private OtpService otpService;
@@ -96,4 +99,58 @@ public class UserServiceImpl implements UserService {
 
         return new ResponseEntity<User>().ok(saveUser);
     }
+
+    public ResponseEntity<?> checkUserExistanceAndSendOTP(String email) {
+        Optional<User> userExist = this.userRepository.findByEmail(email);
+
+        if (userExist.isPresent()) {
+            User user = userExist.get();
+
+            // Generate OTP
+            String otpCode = CommonUtil.generateOTP(6);
+
+            // Save OTP to user entity
+            user.setOtp(Integer.parseInt(otpCode));
+            userRepository.save(user);
+
+            // Send OTP via email
+            otpService.sendOtpOnEmail(user.getEmail(), otpCode, user.getFirstName());
+
+            return new ResponseEntity().ok("OTP sent successfully");
+        } else {
+            return new ResponseEntity().badRequest("User NOt found");
+        }
+    }
+
+
+
+    public boolean verifyOTP(String email, Integer otp) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // Check if OTP matches
+            return otp.equals(user.getOtp());
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+    }
+
+    @Override
+    public void resetPassword(String email, String newPassword) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // Reset password
+            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            userRepository.save(user);
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+    }
+
+
 }
