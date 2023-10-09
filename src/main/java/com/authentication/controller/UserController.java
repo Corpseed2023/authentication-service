@@ -33,14 +33,14 @@ public class UserController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> validateEmailAndSendOTP(@RequestParam String email) {
+    public ResponseEntity<?> validateEmailAndSendOTP(@RequestBody String email) {
 
 //        forgotPasswordService.generateAndSendOTP(email);
         return userService.checkUserExistanceAndSendOTP(email);
     }
 
     @PostMapping("/verify-otp")
-    public ResponseEntity<?> verifyOTP(@RequestParam String email, @RequestParam Integer otp) {
+    public ResponseEntity<?> verifyOTP(@RequestBody String email, @RequestBody Integer otp) {
         try {
             boolean isOTPValid = userService.verifyOTP(email, otp);
             if (isOTPValid) {
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam String newPassword) {
+    public ResponseEntity<?> resetPassword(@RequestBody String email, @RequestBody String newPassword) {
         try {
             userService.resetPassword(email, newPassword);
             return new ResponseEntity().ok("Password reset successfully");
@@ -63,4 +63,10 @@ public class UserController {
             return new ResponseEntity().notFound("User not found".getClass());
         }
     }
+
+    @PostMapping("/createTeamMember")
+    public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) {
+        return this.userService.createTeamMemberUser(userRequest);
+    }
+
 }
