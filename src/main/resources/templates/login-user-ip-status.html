@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Law Zoom - Login Notification</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background-color: #4caf50; /* Notification color */
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img class="logo" th:src="@{../static/img/logo.png}" alt="Law Zoom Logo">
+        <h2>Law Zoom</h2>
+        <p>Login Notification</p>
+    </div>
+    <div class="content">
+        <p>Hello, <span th:text="${name}"></span></p>
+        <p>We detected a login to your Law Zoom account from the following location:</p>
+        <ul>
+            <li><strong>IP Address:</strong> <span th:text="${systemIPAddress}"></span></li>
+            <li><strong>System Name:</strong> <span th:text="${systemName}"></span></li>
+            <li><strong>Network IP:</strong> <span th:text="${networkIPAddress}"></span></li>
+        </ul>
+        <p>If this was not you, please secure your account immediately.</p>
+        <p>Thank you for using Law Zoom.</p>
+    </div>
+</div>
+</body>
+</html>

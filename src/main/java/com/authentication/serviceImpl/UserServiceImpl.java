@@ -152,5 +152,25 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) {
+
+        User saveUser = new User();
+        saveUser.setFirstName(userRequest.getFirstName());
+        saveUser.setLastName(userRequest.getLastName());
+        saveUser.setEmail(userRequest.getEmail());
+        saveUser.setMobile(userRequest.getMobile());
+        saveUser.setPassword(CommonUtil.encodePassword(userRequest.getPassword()));
+        saveUser.setDesignation(userRequest.getDesignation());
+        saveUser.setResourceType(userRequest.getResourceType());
+        saveUser.setCreatedAt(CommonUtil.getDate());
+        saveUser.setUpdatedAt(CommonUtil.getDate());
+        saveUser.setEnable(true);
+        saveUser.setRoles(userRequest.getRoles());
+        this.userRepository.save(saveUser);
+
+        return new ResponseEntity<User>().ok(saveUser);
+    }
+
 
 }

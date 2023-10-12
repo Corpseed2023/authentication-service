@@ -16,4 +16,6 @@ public interface UserService {
     boolean verifyOTP(String email, Integer otp);
 
     void resetPassword(String email, String newPassword);
+
+    ResponseEntity<?> createTeamMemberUser(UserRequest userRequest);
 }
