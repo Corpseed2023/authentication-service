@@ -21,6 +21,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+
     @ApiOperation(value = "Return signup result", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully registered"),

@@ -214,4 +214,35 @@ public class OtpServiceImpl implements OtpService {
     }
 
 
+    public void sendLoginUserDetails(String username, String name,
+                                     String systemName,
+                                     String networkIPAddress,
+                                     String systemIPAddress) {
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        try {
+            helper.setFrom(fromEmail);
+            helper.setTo(username);
+            helper.setSubject("Law Zoom - Sign In Status");
+
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("systemIPAddress", systemIPAddress);
+            context.setVariable("systemName", systemName);
+            context.setVariable("networkIPAddress", networkIPAddress);
+
+            String emailContent = templateEngine.process("login-user-ip-status", context);
+
+            helper.setText(emailContent, true);
+
+        } catch (MessagingException e) {
+            // Handle the exception appropriately, e.g., log it
+            e.printStackTrace();
+        }
+
+        javaMailSender.send(message);
+    }
+
 }
