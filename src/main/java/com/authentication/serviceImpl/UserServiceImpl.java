@@ -15,9 +15,16 @@ import com.authentication.service.UserService;
 import com.authentication.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -29,9 +36,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private OtpServiceImpl otpServiceImpl;
 
     @Autowired
     private OtpService otpService;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Override
     public ResponseEntity<?> signupUser(SignupRequest signupRequest) {
@@ -153,7 +165,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) {
+    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException {
 
         User saveUser = new User();
         saveUser.setFirstName(userRequest.getFirstName());
@@ -168,6 +180,38 @@ public class UserServiceImpl implements UserService {
         saveUser.setEnable(true);
         saveUser.setRoles(userRequest.getRoles());
         this.userRepository.save(saveUser);
+
+
+        String protocol = "http://localhost:8080/set-password.html";
+//        String host = "baeldung.com";
+//        String file = "/set-password.html";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        URL url = new URL(protocol);
+
+        try {
+            helper.setFrom(saveUser.getEmail());
+            helper.setTo(saveUser.getFirstName()+saveUser.getLastName());
+            helper.setSubject("Set your Password");
+
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("systemIPAddress", systemIPAddress);
+            context.setVariable("systemName", systemName);
+            context.setVariable("networkIPAddress", networkIPAddress);
+
+            String emailContent = templateEngine.process("login-user-ip-status", context);
+
+            helper.setText(emailContent, true);
+
+        } catch (MessagingException e) {
+            // Handle the exception appropriately, e.g., log it
+            e.printStackTrace();
+        }
+
+//        otpServiceImpl.s
 
         return new ResponseEntity<User>().ok(saveUser);
     }

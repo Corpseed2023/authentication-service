@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+
 @RestController
 @Api("Handle User related actions")
 @RequestMapping("/api/auth/user")
@@ -67,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping("/createTeamMember")
-    public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
         return this.userService.createTeamMemberUser(userRequest);
     }
 
