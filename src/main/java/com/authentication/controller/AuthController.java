@@ -112,10 +112,7 @@ public class AuthController {
             ipaddressdetails.add(networkIPAddress);
             ipaddressdetails.add(systemIPAddress);
 
-//            System.out.println(systemhostname+systemaddress);
 
-
-//            System.out.println("System IP Address: " + systemipaddress + "\n");
             return ipaddressdetails; // return the IP address as a String
         } catch (UnknownHostException e) {
             System.err.println("Error resolving host: " + e.getMessage());

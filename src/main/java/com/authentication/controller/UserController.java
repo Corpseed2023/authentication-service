@@ -11,7 +11,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.MalformedURLException;
 
 @RestController
 @Api("Handle User related actions")
@@ -66,8 +69,15 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/reset-password/{email}")
+    public String showResetPasswordForm(@PathVariable String email, Model model) {
+        model.addAttribute("email", email);
+        return "reset-password";
+    }
+
     @PostMapping("/createTeamMember")
-    public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
         return this.userService.createTeamMemberUser(userRequest);
     }
 

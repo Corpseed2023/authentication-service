@@ -15,9 +15,17 @@ import com.authentication.service.UserService;
 import com.authentication.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -29,10 +37,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private OtpServiceImpl otpServiceImpl;
 
     @Autowired
     private OtpService otpService;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private SpringTemplateEngine templateEngine;
     @Override
     public ResponseEntity<?> signupUser(SignupRequest signupRequest) {
         OTP otp = this.otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
@@ -153,7 +168,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) {
+    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException {
 
         User saveUser = new User();
         saveUser.setFirstName(userRequest.getFirstName());
@@ -165,9 +180,36 @@ public class UserServiceImpl implements UserService {
         saveUser.setResourceType(userRequest.getResourceType());
         saveUser.setCreatedAt(CommonUtil.getDate());
         saveUser.setUpdatedAt(CommonUtil.getDate());
-        saveUser.setEnable(true);
         saveUser.setRoles(userRequest.getRoles());
         this.userRepository.save(saveUser);
+
+
+//        String protocol = "http://localhost:8080/set-password.html";
+////        String host = "baeldung.com";
+////        String file = "/set-password.html";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+
+        try {
+            helper.setFrom("kaushlendra.pratap@corpseed.com");
+            helper.setTo(userRequest.getEmail());
+            helper.setSubject("Set your Password");
+
+            Context context = new Context();
+            context.setVariable("email", userRequest.getEmail());
+
+            String emailContent = templateEngine.process("email-template", context);
+
+            helper.setText(emailContent, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+//        otpServiceImpl.s
 
         return new ResponseEntity<User>().ok(saveUser);
     }
