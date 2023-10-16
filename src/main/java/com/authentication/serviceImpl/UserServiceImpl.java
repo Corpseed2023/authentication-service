@@ -20,6 +20,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -45,6 +46,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Autowired
+    private SpringTemplateEngine templateEngine;
     @Override
     public ResponseEntity<?> signupUser(SignupRequest signupRequest) {
         OTP otp = this.otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
@@ -177,37 +180,32 @@ public class UserServiceImpl implements UserService {
         saveUser.setResourceType(userRequest.getResourceType());
         saveUser.setCreatedAt(CommonUtil.getDate());
         saveUser.setUpdatedAt(CommonUtil.getDate());
-        saveUser.setEnable(true);
         saveUser.setRoles(userRequest.getRoles());
         this.userRepository.save(saveUser);
 
 
-        String protocol = "http://localhost:8080/set-password.html";
-//        String host = "baeldung.com";
-//        String file = "/set-password.html";
+//        String protocol = "http://localhost:8080/set-password.html";
+////        String host = "baeldung.com";
+////        String file = "/set-password.html";
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        URL url = new URL(protocol);
 
         try {
-            helper.setFrom(saveUser.getEmail());
-            helper.setTo(saveUser.getFirstName()+saveUser.getLastName());
+            helper.setFrom("kaushlendra.pratap@corpseed.com");
+            helper.setTo(userRequest.getEmail());
             helper.setSubject("Set your Password");
 
             Context context = new Context();
-            context.setVariable("name", name);
-            context.setVariable("systemIPAddress", systemIPAddress);
-            context.setVariable("systemName", systemName);
-            context.setVariable("networkIPAddress", networkIPAddress);
+            context.setVariable("email", userRequest.getEmail());
 
-            String emailContent = templateEngine.process("login-user-ip-status", context);
+            String emailContent = templateEngine.process("email-template", context);
 
             helper.setText(emailContent, true);
 
+            javaMailSender.send(message);
         } catch (MessagingException e) {
-            // Handle the exception appropriately, e.g., log it
             e.printStackTrace();
         }
 
