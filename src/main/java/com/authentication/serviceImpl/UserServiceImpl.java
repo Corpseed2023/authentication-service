@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException {
+    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest)  {
 
         User saveUser = new User();
         saveUser.setFirstName(userRequest.getFirstName());
@@ -184,10 +184,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(saveUser);
 
 
-//        String protocol = "http://localhost:8080/set-password.html";
-////        String host = "baeldung.com";
-////        String file = "/set-password.html";
-
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -198,7 +194,7 @@ public class UserServiceImpl implements UserService {
             helper.setSubject("Set your Password");
 
             Context context = new Context();
-            context.setVariable("email", userRequest.getEmail());
+            context.setVariable("emails", userRequest.getEmail());
 
             String emailContent = templateEngine.process("email-template", context);
 
@@ -209,9 +205,13 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
-//        otpServiceImpl.s
-
         return new ResponseEntity<User>().ok(saveUser);
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+         Optional<User>u=userRepository.findById(userId);
+         return u.get();
     }
 
 

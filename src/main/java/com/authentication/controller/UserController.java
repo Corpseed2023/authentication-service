@@ -38,14 +38,14 @@ public class UserController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> validateEmailAndSendOTP(@RequestBody String email) {
+    public ResponseEntity<?> validateEmailAndSendOTP(@RequestParam String email) {
 
 //        forgotPasswordService.generateAndSendOTP(email);
         return userService.checkUserExistanceAndSendOTP(email);
     }
 
     @PostMapping("/verify-otp")
-    public ResponseEntity<?> verifyOTP(@RequestBody String email, @RequestBody Integer otp) {
+    public ResponseEntity<?> verifyOTP(@RequestParam String email, @RequestParam Integer otp) {
         try {
             boolean isOTPValid = userService.verifyOTP(email, otp);
             if (isOTPValid) {
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody String email, @RequestBody String newPassword) {
+    public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam String newPassword) {
         try {
             userService.resetPassword(email, newPassword);
             return new ResponseEntity().ok("Password reset successfully");
@@ -70,15 +70,22 @@ public class UserController {
     }
 
 
-    @GetMapping("/reset-password/{email}")
-    public String showResetPasswordForm(@PathVariable String email, Model model) {
-        model.addAttribute("email", email);
-        return "reset-password";
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam String emails, Model model) {
+        model.addAttribute("emails", emails);
+        return "templates/test.html";
     }
 
     @PostMapping("/createTeamMember")
     public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
         return this.userService.createTeamMemberUser(userRequest);
     }
+
+    @GetMapping("/getUserId")
+    public User getUserById(@RequestParam Long userId) {
+        return this.userService.getUserById(userId);
+    }
+
+
 
 }

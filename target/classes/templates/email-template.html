@@ -6,8 +6,11 @@
 </head>
 <body>
 <h1>Reset Your Password</h1>
-<p>Hello <span th:text="${name}"></span>,</p>
+<p>Hello <span th:text="${emails}"></span>,</p>
 <p>Click the button below to reset your password:</p>
-<a th:href="@{http://localhost:8081/reset-password/(email)}">Reset Password</a>
+<a th:href="@{'http://localhost:3000/invitation/' + ${emails}}">Reset Password</a>
+
+<!--<a th:href="@{'http://localhost:8081/api/auth/user/reset-password/' + ${email}}">Reset Password</a>-->
+
 </body>
 </html>

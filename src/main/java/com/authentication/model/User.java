@@ -69,5 +69,7 @@ public class  User {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Roles> roles;
 
-
+	public Set<Roles> getRoles() {
+		return roles;
+	}
 }

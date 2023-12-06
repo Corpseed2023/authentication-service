@@ -1,5 +1,6 @@
 package com.authentication.service;
 
+import com.authentication.model.User;
 import com.authentication.payload.request.SignupRequest;
 import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.ResponseEntity;
@@ -14,10 +15,11 @@ public interface UserService {
 
     ResponseEntity<?> checkUserExistanceAndSendOTP(String email);
 
-
     boolean verifyOTP(String email, Integer otp);
 
     void resetPassword(String email, String newPassword);
 
     ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException;
+
+    User getUserById(Long userId);
 }
