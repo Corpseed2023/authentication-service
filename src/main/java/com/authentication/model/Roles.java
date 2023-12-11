@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,11 +18,11 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "roles")
-public class Roles {
+public class  Roles {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id ;
 
     @NotNull
     @NotBlank
@@ -38,4 +40,16 @@ public class Roles {
     @Column(length = 1,name="is_enable",columnDefinition = "tinyint(1) default 1")
     @Comment(value = "1 : Active, 0 : Inactive")
     private boolean isEnable;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_access",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "access_id")
+    )
+    private Set<Access> accesses = new HashSet<>();
+
 }

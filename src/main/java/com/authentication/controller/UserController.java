@@ -24,8 +24,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
-
     @ApiOperation(value = "Return signup result", response = ResponseEntity.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully registered"),
@@ -35,6 +33,11 @@ public class UserController {
     @PostMapping("/save")
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) {
         return this.userService.createUser(userRequest);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestParam Long userId, @RequestBody UserRequest updatedUserRequest) {
+        return this.userService.updateUser(userId, updatedUserRequest);
     }
 
     @PostMapping("/forgot-password")
@@ -87,5 +90,13 @@ public class UserController {
     }
 
 
+    @PutMapping("/updateAssociated")
+    public ResponseEntity<?> updateIsAssociated(@RequestParam Long userId, @RequestParam boolean isAssociated) {
+        try {
+            return this.userService.updateIsAssociated(userId, isAssociated);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>().notFound("User not found".getClass());
+        }
+    }
 
 }

@@ -109,6 +109,7 @@ public class UserServiceImpl implements UserService {
         saveUser.setUpdatedAt(CommonUtil.getDate());
         saveUser.setEnable(true);
         saveUser.setRoles(userRequest.getRoles());
+        saveUser.setAssociated(userRequest.isAssociated());
 
         this.userRepository.save(saveUser);
 
@@ -136,8 +137,6 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity().badRequest("User NOt found");
         }
     }
-
-
 
     public boolean verifyOTP(String email, Integer otp) {
         Optional<User> userOptional = userRepository.findByEmail(email);
@@ -215,4 +214,48 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+    @Override
+    public ResponseEntity<?> updateUser(Long userId, UserRequest updatedUserRequest) {
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+
+            existingUser.setFirstName(updatedUserRequest.getFirstName());
+            existingUser.setLastName(updatedUserRequest.getLastName());
+            existingUser.setEmail(updatedUserRequest.getEmail());
+            existingUser.setMobile(updatedUserRequest.getMobile());
+            existingUser.setPassword(CommonUtil.encodePassword(updatedUserRequest.getPassword()));
+            existingUser.setDesignation(updatedUserRequest.getDesignation());
+            existingUser.setResourceType(updatedUserRequest.getResourceType());
+            existingUser.setRoles(updatedUserRequest.getRoles());
+            existingUser.setAssociated(updatedUserRequest.isAssociated()); // Update isAssociated field
+            existingUser.setUpdatedAt(CommonUtil.getDate());
+
+            // Save the updated user
+            userRepository.save(existingUser);
+
+            return new ResponseEntity<User>().ok(existingUser);
+        } else {
+            return new ResponseEntity<String>().notFound("User not found".getClass());
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> updateIsAssociated(Long userId, boolean isAssociated) {
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            existingUser.setAssociated(isAssociated);
+
+            // Save the updated user with the new isAssociated value
+            userRepository.save(existingUser);
+
+            return new ResponseEntity<User>().ok(existingUser);
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+    }
 }

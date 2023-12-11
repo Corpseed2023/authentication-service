@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Set;
 
-public interface RoleRepository extends JpaRepository<Roles,Integer> {
+public interface RoleRepository extends JpaRepository<Roles,Long> {
 
 
     @Query(value = "SELECT * FROM roles r WHERE r.role IN (:rolesList)", nativeQuery = true)

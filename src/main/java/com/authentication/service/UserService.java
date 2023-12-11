@@ -22,4 +22,8 @@ public interface UserService {
     ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException;
 
     User getUserById(Long userId);
+
+    ResponseEntity<?> updateUser(Long userId, UserRequest updatedUserRequest);
+
+    ResponseEntity<?> updateIsAssociated(Long userId, boolean isAssociated);
 }

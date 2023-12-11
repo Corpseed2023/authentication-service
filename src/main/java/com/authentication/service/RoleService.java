@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface RoleService {
     ResponseEntity<List<Roles>> fetchAllRoles();
+
+    ResponseEntity<Roles> createRole(Roles role);
+
+    ResponseEntity<Void> deleteRole(Long roleId);
 }

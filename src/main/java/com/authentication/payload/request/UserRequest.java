@@ -18,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
+public class  UserRequest {
 
     private Long id;
 
@@ -53,6 +53,6 @@ public class UserRequest {
 
     private Set<Roles> roles;
 
-
+    private boolean isAssociated;
 
 }

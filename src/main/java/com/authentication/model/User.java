@@ -69,6 +69,8 @@ public class  User {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Roles> roles;
 
+	@Comment(value = "1 : User have company, 0 : User do not have Company ")
+	private boolean isAssociated = false;
 	public Set<Roles> getRoles() {
 		return roles;
 	}
