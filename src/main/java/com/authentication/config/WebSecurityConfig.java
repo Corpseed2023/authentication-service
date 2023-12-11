@@ -33,7 +33,10 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/api/auth/**","/api/createEnquiry","/api/auth/user/getUserId,",
-            "/api/auth/user/updateIsAssociated","/companyServices/**","/api/auth/user","/companyServices/**","/company/**"
+            "/api/auth/user/updateIsAssociated",
+            "/companyServices/**",
+            "/api/auth/user","/companyServices/**",
+            "/company/**"
     };
 
     @Bean
