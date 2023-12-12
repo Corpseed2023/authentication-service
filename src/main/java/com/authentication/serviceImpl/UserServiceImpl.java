@@ -3,12 +3,14 @@ package com.authentication.serviceImpl;
 import com.authentication.exception.UserNotFoundException;
 import com.authentication.model.OTP;
 import com.authentication.model.Roles;
+import com.authentication.model.Subscription;
 import com.authentication.model.User;
 import com.authentication.payload.request.SignupRequest;
 import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.MessageResponse;
 import com.authentication.payload.response.ResponseEntity;
 import com.authentication.repository.RoleRepository;
+import com.authentication.repository.SubscriptionRepository;
 import com.authentication.repository.UserRepository;
 import com.authentication.service.OtpService;
 import com.authentication.service.UserService;
@@ -36,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     private OtpServiceImpl otpServiceImpl;
@@ -71,7 +76,14 @@ public class UserServiceImpl implements UserService {
 
         newUser.setRoles(userRoleData(signupRequest.getRoleList()));
 
-        this.userRepository.save(newUser);
+        // Create a subscription record with a 15-day trial period
+        Date currentDate = new Date();
+        Date trialEndDate = new Date(currentDate.getTime() + (15 * 24 * 60 * 60 * 1000)); // 15 days in milliseconds
+
+
+        Subscription subscription = new Subscription(newUser, currentDate, trialEndDate);
+        subscriptionRepository.save(subscription);
+        System.out.println(subscription);
 
         return new ResponseEntity<MessageResponse>().ok(new MessageResponse("Signup Success"));
     }

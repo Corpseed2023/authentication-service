@@ -71,6 +71,11 @@ public class  User {
 
 	@Comment(value = "1 : User have company, 0 : User do not have Company ")
 	private boolean isAssociated = false;
+
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "subscription")
+	private Subscription subscription;
 	public Set<Roles> getRoles() {
 		return roles;
 	}

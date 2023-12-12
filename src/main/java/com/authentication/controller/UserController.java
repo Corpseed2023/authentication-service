@@ -1,5 +1,6 @@
 package com.authentication.controller;
 
+
 import com.authentication.exception.UserNotFoundException;
 import com.authentication.model.User;
 import com.authentication.payload.request.UserRequest;
@@ -14,15 +15,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.net.MalformedURLException;
+
 
 @RestController
 @Api("Handle User related actions")
 @RequestMapping("/api/auth/user")
 public class UserController {
 
+
     @Autowired
     private UserService userService;
+
 
     @ApiOperation(value = "Return signup result", response = ResponseEntity.class)
     @ApiResponses(value = {
@@ -35,17 +40,15 @@ public class UserController {
         return this.userService.createUser(userRequest);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestParam Long userId, @RequestBody UserRequest updatedUserRequest) {
-        return this.userService.updateUser(userId, updatedUserRequest);
-    }
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> validateEmailAndSendOTP(@RequestParam String email) {
 
+
 //        forgotPasswordService.generateAndSendOTP(email);
         return userService.checkUserExistanceAndSendOTP(email);
     }
+
 
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOTP(@RequestParam String email, @RequestParam Integer otp) {
@@ -60,7 +63,9 @@ public class UserController {
             return new ResponseEntity().notFound("User not found".getClass());
         }
 
+
     }
+
 
     @PutMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam String newPassword) {
@@ -73,30 +78,23 @@ public class UserController {
     }
 
 
+
+
     @GetMapping("/reset-password")
     public String showResetPasswordForm(@RequestParam String emails, Model model) {
         model.addAttribute("emails", emails);
         return "templates/test.html";
     }
 
+
     @PostMapping("/createTeamMember")
     public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
         return this.userService.createTeamMemberUser(userRequest);
     }
 
+
     @GetMapping("/getUserId")
     public User getUserById(@RequestParam Long userId) {
         return this.userService.getUserById(userId);
     }
-
-
-    @PutMapping("/updateAssociated")
-    public ResponseEntity<?> updateIsAssociated(@RequestParam Long userId, @RequestParam boolean isAssociated) {
-        try {
-            return this.userService.updateIsAssociated(userId, isAssociated);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>().notFound("User not found".getClass());
-        }
-    }
-
 }
