@@ -73,9 +73,11 @@ public class  User {
 	private boolean isAssociated = false;
 
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subscription")
 	private Subscription subscription;
+
+
 	public Set<Roles> getRoles() {
 		return roles;
 	}

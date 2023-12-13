@@ -1,5 +1,6 @@
 package com.authentication.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
@@ -22,6 +23,7 @@ public class  Roles {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(hidden = true)
     private Long id ;
 
     @NotNull
@@ -40,9 +42,6 @@ public class  Roles {
     @Column(length = 1,name="is_enable",columnDefinition = "tinyint(1) default 1")
     @Comment(value = "1 : Active, 0 : Inactive")
     private boolean isEnable;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
 
 //    @ManyToMany(fetch = FetchType.EAGER)
 //    @JoinTable(

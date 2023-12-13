@@ -27,7 +27,8 @@ public class RolesController {
             @ApiResponse(code = 500, message = "Something Went-Wrong"),
             @ApiResponse(code = 400, message = "Bad Request")
     })
-    @GetMapping()
+
+    @GetMapping("getAllRoles")
     public ResponseEntity<List<Roles>> fetchRoles() {
         return this.roleService.fetchAllRoles();
     }
@@ -39,7 +40,8 @@ public class RolesController {
             @ApiResponse(code = 500, message = "Something Went Wrong"),
             @ApiResponse(code = 400, message = "Bad Request")
     })
-    @PostMapping()
+
+    @PostMapping("/createRole")
     public ResponseEntity<Roles> createRole(@RequestBody Roles role) {
         return roleService.createRole(role);
     }
@@ -51,7 +53,7 @@ public class RolesController {
             @ApiResponse(code = 500, message = "Something Went Wrong"),
             @ApiResponse(code = 400, message = "Bad Request")
     })
-    @DeleteMapping("/{roleId}")
+    @DeleteMapping("/removeRole")
     public ResponseEntity<Void> deleteRole(@PathVariable Long roleId) {
         return roleService.deleteRole(roleId);
     }

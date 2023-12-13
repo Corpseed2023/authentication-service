@@ -97,7 +97,6 @@ public class AuthController {
 
         try {
 
-
             InetAddress localhost = InetAddress.getLocalHost();
 
             // Get system IP address

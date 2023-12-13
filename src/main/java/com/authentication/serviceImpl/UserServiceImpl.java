@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SpringTemplateEngine templateEngine;
+
     @Override
     public ResponseEntity<?> signupUser(SignupRequest signupRequest) {
         OTP otp = this.otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<String>().badRequest("Error : User Already Exist !!");
 
         User newUser = new User();
-        newUser.setId(0L);
+//        newUser.setId(0L);
         newUser.setMobile(signupRequest.getEmail());
         newUser.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
         newUser.setResourceType("In-House");
@@ -76,6 +77,8 @@ public class UserServiceImpl implements UserService {
         newUser.setEmail(signupRequest.getEmail());
 
         newUser.setRoles(userRoleData(signupRequest.getRoleList()));
+
+        userRepository.save(newUser);
 
         // Create a subscription record with a 15-day trial period
         Date currentDate = new Date();
@@ -97,7 +100,7 @@ public class UserServiceImpl implements UserService {
         System.out.println(roles);
 
         return new HashSet<>(roles);
-    }
+    }//we want
 
     @Override
     public ResponseEntity<?> createUser(UserRequest userRequest) {

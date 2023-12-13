@@ -19,9 +19,6 @@ public class Subscription {
     @JoinColumn(name = "user_id")
     private User user;
 
-
-
-
     @Column(name = "start_date", nullable = false)
     private Date startDate;
 
