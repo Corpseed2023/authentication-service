@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> signupUser(SignupRequest signupRequest) {
         OTP otp = this.otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
 
+
         if (otp == null)
             return new ResponseEntity<String>().badRequest("Enter a valid OTP !!");
 
