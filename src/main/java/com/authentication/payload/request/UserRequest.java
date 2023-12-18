@@ -6,9 +6,6 @@ import org.hibernate.annotations.Comment;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
@@ -23,6 +20,8 @@ public class  UserRequest {
     private Long id;
 
     private String firstName;
+
+    private String uuid;
 
     private String lastName;
 
@@ -55,4 +54,5 @@ public class  UserRequest {
 
     private boolean isAssociated;
 
+    private Long company_id;
 }

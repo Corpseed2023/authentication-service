@@ -23,6 +23,9 @@ public class  User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "uuid", unique = true, nullable = false)
+	private String uuid;
 	
 	@Column(name = "first_name")
 	private String firstName;
@@ -72,10 +75,15 @@ public class  User {
 	@Comment(value = "1 : User have company, 0 : User do not have Company ")
 	private boolean isAssociated = false;
 
-
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "subscription")
 	private Subscription subscription;
+
+	private Long company_id;
+
+	private boolean emailSent;
+
+
 	public Set<Roles> getRoles() {
 		return roles;
 	}
