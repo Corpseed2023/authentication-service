@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService {
         newUser.setEnable(true);
         newUser.setEmail(signupRequest.getEmail());
 
+
         // Assign roles to the user
         Set<Roles> roles = userRoleData(signupRequest.getRoleList());
 
