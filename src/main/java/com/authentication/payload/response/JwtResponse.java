@@ -11,17 +11,17 @@ public class JwtResponse {
   private List<String> roles;
   private Boolean isAssociated;
 
-//  public JwtResponse(String token, String type, Long id, String username, String email, List<String> roles, Boolean isAssociated) {
-//    this.type = type;
-//    this.id = id;
-//    this.username = username;
-//    this.email = email;
-//    this.roles = roles;
-//    this.isAssociated = isAssociated;
-//  }
+  public JwtResponse(String token, Long id, String username, String email, List<String> roles, Boolean isAssociated) {
 
-  public JwtResponse(String jwt, Long id, String username, String email, Boolean associated, List<String> roles) {
+    this.token=token;
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.roles = roles;
+    this.isAssociated = isAssociated;
   }
+
+
 
   public String getAccessToken() {
     return token;
