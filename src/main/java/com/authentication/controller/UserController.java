@@ -97,4 +97,12 @@ public class UserController {
     public User getUserById(@RequestParam Long userId) {
         return this.userService.getUserById(userId);
     }
+
+    @PutMapping("/update-associated")
+    public ResponseEntity<?> updateUserExistInCompany(Long userId, boolean isAssociated) {
+
+        userService.updateIsAssociated(userId,isAssociated);
+
+        return new ResponseEntity().ok("User Association Done");
+    }
 }
