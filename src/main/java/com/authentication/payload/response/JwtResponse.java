@@ -9,13 +9,18 @@ public class JwtResponse {
   private String username;
   private String email;
   private List<String> roles;
+  private Boolean isAssociated;
 
-  public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
-    this.token = accessToken;
-    this.id = id;
-    this.username = username;
-    this.email = email;
-    this.roles = roles;
+//  public JwtResponse(String token, String type, Long id, String username, String email, List<String> roles, Boolean isAssociated) {
+//    this.type = type;
+//    this.id = id;
+//    this.username = username;
+//    this.email = email;
+//    this.roles = roles;
+//    this.isAssociated = isAssociated;
+//  }
+
+  public JwtResponse(String jwt, Long id, String username, String email, Boolean associated, List<String> roles) {
   }
 
   public String getAccessToken() {
@@ -60,5 +65,13 @@ public class JwtResponse {
 
   public List<String> getRoles() {
     return roles;
+  }
+
+  public Boolean getAssociated() {
+    return isAssociated;
+  }
+
+  public void setAssociated(Boolean associated) {
+    isAssociated = associated;
   }
 }
