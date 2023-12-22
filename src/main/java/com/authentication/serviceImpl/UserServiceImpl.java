@@ -233,18 +233,18 @@ public class UserServiceImpl implements UserService {
 
         User saveUser = new User();
 
-        Set<Roles> persistedRoles = userRequest.getRoles().stream()
-                .map(role -> {
-                    Roles foundRole = roleRepository.findByRole(role.getRole());
-                    if (foundRole == null) {
-                        throw new EntityNotFoundException("Role not found: " + role.getRole());
-                    }
-                    return foundRole;
-                })
-                .collect(Collectors.toSet());
+//        Set<Roles> persistedRoles = userRequest.getRoles().stream()
+//                .map(role -> {
+//                    Roles foundRole = roleRepository.findByRole(role.getRole());
+//                    if (foundRole == null) {
+//                        throw new EntityNotFoundException("Role not found: " + role.getRole());
+//                    }
+//                    return foundRole;
+//                })
+//                .collect(Collectors.toSet());
 
 
-        saveUser.setRoles(persistedRoles);
+//        saveUser.setRoles(persistedRoles);
         saveUser.setFirstName(userRequest.getFirstName());
         saveUser.setUuid(UUID.randomUUID().toString()); // Generate and set UUID
         saveUser.setLastName(userRequest.getLastName());

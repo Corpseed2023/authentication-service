@@ -88,8 +88,10 @@ public class UserController {
 
 
     @PostMapping("/createTeamMember")
-    public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
-        return this.userService.createTeamMemberUser(userRequest);
+    public void createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
+       System.out.println("Testing  hhhh. .  ");
+        this.userService.createTeamMemberUser(userRequest);
+//        return this.userService.createTeamMemberUser(userRequest);
     }
 
 
