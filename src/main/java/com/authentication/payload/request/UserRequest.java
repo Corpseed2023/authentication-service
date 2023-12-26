@@ -54,5 +54,5 @@ public class  UserRequest {
 
     private boolean isAssociated;
 
-    private Long company_id;
+    private Long companyId;
 }

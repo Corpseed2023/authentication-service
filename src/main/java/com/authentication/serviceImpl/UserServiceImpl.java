@@ -255,8 +255,9 @@ public class UserServiceImpl implements UserService {
         saveUser.setResourceType(userRequest.getResourceType());
         saveUser.setCreatedAt(CommonUtil.getDate());
         saveUser.setUpdatedAt(CommonUtil.getDate());
+        saveUser.setCompanyId(userRequest.getCompanyId());
 //        saveUser.setRoles(userRequest.getRoles());
-        saveUser.setCompany_id(userRequest.getCompany_id());
+        saveUser.setCompanyId(userRequest.getCompanyId());
         this.userRepository.save(saveUser);
 
 

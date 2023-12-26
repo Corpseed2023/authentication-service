@@ -79,7 +79,7 @@ public class  User {
 	@JoinColumn(name = "subscription")
 	private Subscription subscription;
 
-	private Long company_id;
+	private Long companyId;
 
 	private boolean emailSent;
 
