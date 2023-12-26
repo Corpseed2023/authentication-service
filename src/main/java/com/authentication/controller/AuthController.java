@@ -88,8 +88,8 @@ public class AuthController {
                         userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
-                        roles,userDetails.getSubscribed(),
-                        userDetails.getAssociated()));
+                        roles,
+                        userDetails.getAssociated(),userDetails.getSubscribed()));
     }
 
     private List<String> getSystemIPAddress() {
