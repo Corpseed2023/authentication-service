@@ -11,7 +11,10 @@ public class JwtResponse {
   private List<String> roles;
   private Boolean isAssociated;
 
-  public JwtResponse(String token, Long id, String username, String email, List<String> roles, Boolean isAssociated) {
+  private Boolean subscribed;
+
+
+  public JwtResponse(String token, Long id, String username, String email, List<String> roles, Boolean isAssociated,Boolean subscribed) {
 
     this.token=token;
     this.id = id;
@@ -19,25 +22,9 @@ public class JwtResponse {
     this.email = email;
     this.roles = roles;
     this.isAssociated = isAssociated;
+    this.subscribed =subscribed;
   }
 
-
-
-  public String getAccessToken() {
-    return token;
-  }
-
-  public void setAccessToken(String accessToken) {
-    this.token = accessToken;
-  }
-
-  public String getTokenType() {
-    return type;
-  }
-
-  public void setTokenType(String tokenType) {
-    this.type = tokenType;
-  }
 
   public Long getId() {
     return id;
@@ -55,6 +42,26 @@ public class JwtResponse {
     this.email = email;
   }
 
+  public List<String> getRoles() {
+    return roles;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
   public String getUsername() {
     return username;
   }
@@ -63,8 +70,8 @@ public class JwtResponse {
     this.username = username;
   }
 
-  public List<String> getRoles() {
-    return roles;
+  public void setRoles(List<String> roles) {
+    this.roles = roles;
   }
 
   public Boolean getAssociated() {
@@ -73,5 +80,13 @@ public class JwtResponse {
 
   public void setAssociated(Boolean associated) {
     isAssociated = associated;
+  }
+
+  public Boolean getSubscribed() {
+    return subscribed;
+  }
+
+  public void setSubscribed(Boolean subscribed) {
+    this.subscribed = subscribed;
   }
 }

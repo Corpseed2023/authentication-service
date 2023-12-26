@@ -83,6 +83,9 @@ public class  User {
 
 	private boolean emailSent;
 
+	@Comment(value = "1 : User is Subscriber, 0 : User do not have subscription ")
+	private boolean isSubscribed = true;
+
 
 	public Set<Roles> getRoles() {
 		return roles;

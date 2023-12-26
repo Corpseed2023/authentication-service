@@ -87,8 +87,10 @@ public class UserServiceImpl implements UserService {
         // Assign roles to the user
         Set<Roles> roles = userRoleData(signupRequest.getRoleList());
 
-        if (roles == null || roles.isEmpty()) {
-            // If roles are zero, null, or empty, check if the user is signing up for the first time
+//        if (roles == null || roles.isEmpty()) {
+            if (roles.isEmpty()) {
+
+                // If roles are zero, null, or empty, check if the user is signing up for the first time
             if (isFirstTimeSignup(newUser)) {
                 // If first time, assign the SUBSCRIBER role by default
                 Roles subscriberRole = roleRepository.findByRole("SUPER ADMIN");
@@ -256,6 +258,7 @@ public class UserServiceImpl implements UserService {
         saveUser.setCreatedAt(CommonUtil.getDate());
         saveUser.setUpdatedAt(CommonUtil.getDate());
         saveUser.setCompanyId(userRequest.getCompanyId());
+        saveUser.setSubscribed(false);
 //        saveUser.setRoles(userRequest.getRoles());
         saveUser.setCompanyId(userRequest.getCompanyId());
         this.userRepository.save(saveUser);

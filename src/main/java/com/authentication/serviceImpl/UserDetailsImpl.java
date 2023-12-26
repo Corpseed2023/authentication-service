@@ -23,15 +23,18 @@ public class UserDetailsImpl implements UserDetails {
 
     private Boolean isAssociated;
 
+    private Boolean isSubscribed;
+
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password,Boolean isAssociated,
+    public UserDetailsImpl(Long id, String username, String email, String password,Boolean isAssociated,Boolean isSubscribed,
                                   Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.isSubscribed=isSubscribed;
         this.isAssociated=isAssociated;
     }
 
@@ -44,7 +47,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getId(),
                 user.getMobile(),
                 user.getEmail(),
-                user.getPassword(),user.isAssociated(),
+                user.getPassword(),user.isAssociated(),user.isSubscribed(),
                 authorities);
     }
 
@@ -93,6 +96,14 @@ public class UserDetailsImpl implements UserDetails {
 
     public Boolean getAssociated() {
         return isAssociated;
+    }
+
+    public Boolean getSubscribed() {
+        return isSubscribed;
+    }
+
+    public void setSubscribed(Boolean subscribed) {
+        isSubscribed = subscribed;
     }
 
     public void setAssociated(Boolean associated) {
