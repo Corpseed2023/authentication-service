@@ -25,5 +25,5 @@ public interface UserService {
 
     ResponseEntity<?> updateUser(Long userId, UserRequest updatedUserRequest);
 
-    ResponseEntity<?> updateIsAssociated(Long userId, boolean isAssociated);
+    ResponseEntity<?> updateIsAssociatedAndIsSubscribe(Long userId, boolean isAssociated, boolean isSubscribed);
 }

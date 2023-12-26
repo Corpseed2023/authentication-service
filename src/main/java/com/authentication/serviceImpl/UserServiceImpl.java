@@ -324,12 +324,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updateIsAssociated(Long userId, boolean isAssociated) {
+    public ResponseEntity<?> updateIsAssociatedAndIsSubscribe(Long userId, boolean isAssociated,
+                                                boolean isSubscribed) {
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isPresent()) {
             User existingUser = userOptional.get();
             existingUser.setAssociated(isAssociated);
+            existingUser.setSubscribed(isSubscribed);
 
             // Save the updated user with the new isAssociated value
             userRepository.save(existingUser);
