@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 
 
@@ -88,9 +89,9 @@ public class UserController {
 
 
     @PostMapping("/createTeamMember")
-    public void createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
+    public void createTeamMemberUsers(@RequestBody UserRequest userRequest , HttpServletRequest httpServletRequest) throws MalformedURLException {
        System.out.println("Testing  hhhh. .  ");
-        this.userService.createTeamMemberUser(userRequest);
+        this.userService.createTeamMemberUser(userRequest,httpServletRequest);
 //        return this.userService.createTeamMemberUser(userRequest);
     }
 

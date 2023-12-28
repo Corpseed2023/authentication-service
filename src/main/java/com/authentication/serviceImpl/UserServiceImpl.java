@@ -26,6 +26,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,12 +55,16 @@ public class UserServiceImpl implements UserService {
     private SpringTemplateEngine templateEngine;
 
     @Override
-    public ResponseEntity<?> signupUser(SignupRequest signupRequest) {
+    public ResponseEntity<?> signupUser(SignupRequest signupRequest, HttpServletRequest httpServletRequest) {
         // Check if the user already exists
         User existingUser = userRepository.findByEmail(signupRequest.getEmail()).orElse(null);
         if (existingUser != null) {
             return new ResponseEntity<String>().badRequest("Error: User Already Exists!");
         }
+
+        String remoteAddress = httpServletRequest.getRemoteAddr();
+
+        // Set remote address in the new user
 
         // Find OTP and check if it's valid
         OTP otp = this.otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
@@ -82,6 +87,8 @@ public class UserServiceImpl implements UserService {
         newUser.setUpdatedAt(new Date());
         newUser.setEnable(true);
         newUser.setEmail(signupRequest.getEmail());
+        newUser.setRemoteAddress(remoteAddress);
+
 
 
         // Assign roles to the user
@@ -231,7 +238,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest)  {
+    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest, HttpServletRequest httpServletRequest)  {
 
         User saveUser = new User();
 
@@ -244,6 +251,8 @@ public class UserServiceImpl implements UserService {
 //                    return foundRole;
 //                })
 //                .collect(Collectors.toSet());
+
+        String remoteAddress = httpServletRequest.getRemoteAddr();
 
 
 //        saveUser.setRoles(persistedRoles);
@@ -259,6 +268,7 @@ public class UserServiceImpl implements UserService {
         saveUser.setUpdatedAt(CommonUtil.getDate());
         saveUser.setCompanyId(userRequest.getCompanyId());
         saveUser.setSubscribed(false);
+        saveUser.setRemoteAddress(remoteAddress);
 //        saveUser.setRoles(userRequest.getRoles());
         saveUser.setCompanyId(userRequest.getCompanyId());
         this.userRepository.save(saveUser);

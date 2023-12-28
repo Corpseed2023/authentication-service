@@ -86,6 +86,9 @@ public class  User {
 	@Comment(value = "1 : User is Subscriber, 0 : User do not have subscription ")
 	private boolean isSubscribed = false;
 
+	@Column(name = "remote_address")
+	private String remoteAddress;
+
 
 	public Set<Roles> getRoles() {
 		return roles;

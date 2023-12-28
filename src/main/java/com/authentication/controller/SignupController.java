@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @Api("Handle Signup related actions")
 @RequestMapping("/api/auth/signup")
@@ -25,10 +27,10 @@ public class SignupController {
             @ApiResponse(code = 400,message = "Bad Request")
     })
     @PostMapping()
-    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest, HttpServletRequest httpServletRequest){
 
         System.out.println(signupRequest);
-        return userService.signupUser(signupRequest);
+        return userService.signupUser(signupRequest,httpServletRequest);
     }
 
 }

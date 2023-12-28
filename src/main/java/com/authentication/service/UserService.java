@@ -5,11 +5,12 @@ import com.authentication.payload.request.SignupRequest;
 import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 
 public interface UserService {
 
-    ResponseEntity<?> signupUser(SignupRequest signupRequest);
+    ResponseEntity<?> signupUser(SignupRequest signupRequest, HttpServletRequest httpServletRequest);
 
     ResponseEntity createUser(UserRequest userRequest);
 
@@ -19,7 +20,7 @@ public interface UserService {
 
     void resetPassword(String email, String newPassword);
 
-    ResponseEntity<?> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException;
+    ResponseEntity<?> createTeamMemberUser(UserRequest userRequest , HttpServletRequest httpServletRequest) throws MalformedURLException;
 
     User getUserById(Long userId);
 
