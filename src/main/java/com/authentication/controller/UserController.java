@@ -96,7 +96,6 @@ public class UserController {
 //        return this.userService.createTeamMemberUser(userRequest);
     }
 
-
     @GetMapping("/getUserId")
     public User getUserById(@RequestParam Long userId) {
         return this.userService.getUserById(userId);
