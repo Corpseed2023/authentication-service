@@ -93,7 +93,6 @@ public class UserController {
     public UserResponse createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
        System.out.println("Testing  hhhh. .  ");
        return this.userService.createTeamMemberUser(userRequest);
-//        return this.userService.createTeamMemberUser(userRequest);
     }
 
     @GetMapping("/getUserId")
