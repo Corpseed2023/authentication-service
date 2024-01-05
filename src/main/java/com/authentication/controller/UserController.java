@@ -5,6 +5,7 @@ import com.authentication.exception.UserNotFoundException;
 import com.authentication.model.User;
 import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.ResponseEntity;
+import com.authentication.payload.response.UserResponse;
 import com.authentication.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -89,9 +90,9 @@ public class UserController {
 
 
     @PostMapping("/createTeamMember")
-    public void createTeamMemberUsers(@RequestBody UserRequest userRequest , HttpServletRequest httpServletRequest) throws MalformedURLException {
+    public UserResponse createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
        System.out.println("Testing  hhhh. .  ");
-        this.userService.createTeamMemberUser(userRequest,httpServletRequest);
+       return this.userService.createTeamMemberUser(userRequest);
 //        return this.userService.createTeamMemberUser(userRequest);
     }
 

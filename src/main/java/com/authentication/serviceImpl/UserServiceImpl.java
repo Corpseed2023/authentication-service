@@ -9,6 +9,7 @@ import com.authentication.payload.request.SignupRequest;
 import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.MessageResponse;
 import com.authentication.payload.response.ResponseEntity;
+import com.authentication.payload.response.UserResponse;
 import com.authentication.repository.RoleRepository;
 import com.authentication.repository.SubscriptionRepository;
 import com.authentication.repository.UserRepository;
@@ -238,7 +239,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest, HttpServletRequest httpServletRequest)  {
+    public UserResponse createTeamMemberUser(UserRequest userRequest)  {
 
         User saveUser = new User();
 
@@ -252,7 +253,7 @@ public class UserServiceImpl implements UserService {
 //                })
 //                .collect(Collectors.toSet());
 
-        String remoteAddress = httpServletRequest.getRemoteAddr();
+//        String remoteAddress = httpServletRequest.getRemoteAddr();
 
 
 //        saveUser.setRoles(persistedRoles);
@@ -268,7 +269,7 @@ public class UserServiceImpl implements UserService {
         saveUser.setUpdatedAt(CommonUtil.getDate());
         saveUser.setCompanyId(userRequest.getCompanyId());
         saveUser.setSubscribed(false);
-        saveUser.setRemoteAddress(remoteAddress);
+//        saveUser.setRemoteAddress(remoteAddress);
 //        saveUser.setRoles(userRequest.getRoles());
         saveUser.setCompanyId(userRequest.getCompanyId());
         this.userRepository.save(saveUser);
@@ -295,7 +296,14 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
-        return new ResponseEntity<User>().ok(saveUser);
+        UserResponse userResponseData = new UserResponse();
+
+        userResponseData.setFirstName(saveUser.getFirstName());
+        userResponseData.setLastName(saveUser.getLastName());
+        userResponseData.setUserId(saveUser.getId());
+
+
+        return userResponseData;
     }
 
     @Override
