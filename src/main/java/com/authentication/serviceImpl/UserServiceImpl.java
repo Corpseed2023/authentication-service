@@ -10,6 +10,7 @@ import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.MessageResponse;
 import com.authentication.payload.response.ResponseEntity;
 import com.authentication.payload.response.UserResponse;
+import com.authentication.repository.OtpRepository;
 import com.authentication.repository.RoleRepository;
 import com.authentication.repository.SubscriptionRepository;
 import com.authentication.repository.UserRepository;
@@ -44,13 +45,13 @@ public class UserServiceImpl implements UserService {
     private SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    private OtpServiceImpl otpServiceImpl;
-
-    @Autowired
     private OtpService otpService;
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private OtpRepository otpRepository;
 
     @Autowired
     private SpringTemplateEngine templateEngine;
@@ -63,18 +64,31 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<String>().badRequest("Error: User Already Exists!");
         }
 
+        // Set remote address in the new user
         String remoteAddress = httpServletRequest.getRemoteAddr();
 
-        // Set remote address in the new user
-
         // Find OTP and check if it's valid
-        OTP otp = this.otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
+        OTP otp = otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
         if (otp == null) {
             return new ResponseEntity<String>().badRequest("Enter a valid OTP!");
         }
 
         if (isOtpExpired(otp)) {
             return new ResponseEntity<String>().badRequest("Error: OTP has expired.");
+        }
+
+        // Mark the OTP as used
+        otp.setUsed(true);
+        otpRepository.save(otp); // Assuming you have a method like saveOtp in your OtpService
+
+        // Assign roles to the user
+        Set<Roles> roles;
+
+        try {
+            roles = userRoleData(signupRequest.getRoleList());
+        } catch (IllegalArgumentException e) {
+            // Handle the case where some roles do not exist
+            return new ResponseEntity<String>().badRequest(e.getMessage());
         }
 
         // Create a new user
@@ -90,18 +104,11 @@ public class UserServiceImpl implements UserService {
         newUser.setEmail(signupRequest.getEmail());
         newUser.setRemoteAddress(remoteAddress);
 
-
-
-        // Assign roles to the user
-        Set<Roles> roles = userRoleData(signupRequest.getRoleList());
-
-//        if (roles == null || roles.isEmpty()) {
-            if (roles.isEmpty()) {
-
-                // If roles are zero, null, or empty, check if the user is signing up for the first time
+        if (!roles.isEmpty()) {
+            // If roles are zero, null, or empty, check if the user is signing up for the first time
             if (isFirstTimeSignup(newUser)) {
                 // If first time, assign the SUBSCRIBER role by default
-                Roles subscriberRole = roleRepository.findByRole("SUPER ADMIN");
+                Roles subscriberRole = roleRepository.findByRole("SUPER_ADMIN");
 
                 if (subscriberRole == null) {
                     // If SUBSCRIBER role does not exist, return a bad request with an error message
@@ -133,6 +140,7 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<MessageResponse>().ok(new MessageResponse("Signup Success"));
     }
 
+
     // Check if the user is signing up for the first time
     private boolean isFirstTimeSignup(User user) {
         // You can implement the logic to check if this is the first time signup for the user
@@ -144,16 +152,22 @@ public class UserServiceImpl implements UserService {
         if (otp == null || otp.getExpiredAt() == null) {
             return true; // If OTP or its expiration date is not available, consider it expired
         }
-
         Date currentDateTime = new Date();
         return currentDateTime.after(otp.getExpiredAt());
     }
 
     private Set<Roles> userRoleData(List<String> rolesList) {
-        Set<Roles> roles = roleRepository.findRoleList(rolesList);
-        System.out.println(roles);
+        // Find existing roles in the role table
+        Set<Roles> existingRoles = roleRepository.findRoleList(rolesList);
 
-        return new HashSet<>(roles);
+        // Check if all roles in rolesList exist in the role table
+        if (existingRoles.size() < rolesList.size()) {
+            // Handle the case where some roles do not exist
+            throw new IllegalArgumentException("Error: Some roles specified do not exist in the role table");
+        }
+
+        System.out.println(existingRoles);
+        return existingRoles;
     }
 
 

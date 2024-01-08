@@ -7,7 +7,6 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Builder
@@ -37,5 +36,6 @@ public class UserResponse {
 
     private Long userId;
 
-
+    public UserResponse() {
+    }
 }

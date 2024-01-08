@@ -7,6 +7,7 @@ import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.ResponseEntity;
 import com.authentication.payload.response.UserResponse;
 import com.authentication.service.UserService;
+import com.authentication.utils.CommonUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-
-import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 
 
@@ -39,6 +37,8 @@ public class UserController {
     })
     @PostMapping("/save")
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) {
+
+
         return this.userService.createUser(userRequest);
     }
 
@@ -78,9 +78,6 @@ public class UserController {
             return new ResponseEntity().notFound("User not found".getClass());
         }
     }
-
-
-
 
     @GetMapping("/reset-password")
     public String showResetPasswordForm(@RequestParam String emails, Model model) {

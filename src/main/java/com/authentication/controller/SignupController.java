@@ -3,6 +3,7 @@ package com.authentication.controller;
 import com.authentication.payload.request.SignupRequest;
 import com.authentication.payload.response.ResponseEntity;
 import com.authentication.service.UserService;
+import com.authentication.utils.CommonUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -27,10 +28,14 @@ public class SignupController {
             @ApiResponse(code = 400,message = "Bad Request")
     })
     @PostMapping()
-    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest, HttpServletRequest httpServletRequest) {
 
-        System.out.println(signupRequest);
-        return userService.signupUser(signupRequest,httpServletRequest);
+        // Validate email format and Name
+        if (!CommonUtil.isValidEmail(signupRequest.getEmail()) || !CommonUtil.isValidName(signupRequest.getName())) {
+            return new ResponseEntity<String>().badRequest("Error: Invalid email or name format!");
+        }
+        return userService.signupUser(signupRequest, httpServletRequest);
     }
+
 
 }
