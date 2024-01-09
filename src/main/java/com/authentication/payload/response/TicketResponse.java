@@ -15,5 +15,11 @@ public class TicketResponse {
     private boolean status;
 
     public TicketResponse(int id, Date creationDate, String subject, String description, boolean status) {
+        this.id = id;
+        this.creationDate = creationDate;
+        this.subject = subject;
+        this.description = description;
+        this.status = status;
     }
+
 }
