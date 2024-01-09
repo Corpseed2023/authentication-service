@@ -10,9 +10,10 @@ import java.util.Date;
 @Entity
 @Data
 public class Ticket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @CreatedDate
     @CreationTimestamp

@@ -8,18 +8,18 @@ import java.util.Date;
 public class TicketResponse {
 
 
-    private int id;
+    private Long id;
     private Date creationDate;
     private String subject;
     private String description;
     private boolean status;
 
-    public TicketResponse(int id, Date creationDate, String subject, String description, boolean status) {
+
+    public TicketResponse(Long id, Date creationDate, String subject, String description, boolean status) {
         this.id = id;
         this.creationDate = creationDate;
         this.subject = subject;
         this.description = description;
         this.status = status;
     }
-
 }
