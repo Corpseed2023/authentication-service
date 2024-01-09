@@ -7,7 +7,6 @@ import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.ResponseEntity;
 import com.authentication.payload.response.UserResponse;
 import com.authentication.service.UserService;
-import com.authentication.utils.CommonUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,10 +41,8 @@ public class UserController {
         return this.userService.createUser(userRequest);
     }
 
-
     @PostMapping("/forgot-password")
     public ResponseEntity<?> validateEmailAndSendOTP(@RequestParam String email) {
-
 
 //        forgotPasswordService.generateAndSendOTP(email);
         return userService.checkUserExistanceAndSendOTP(email);

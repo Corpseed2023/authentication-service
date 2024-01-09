@@ -47,7 +47,6 @@ public class OtpController {
             otpService.sendOtpOnEmail(otpRequest.getEmail(), otpResponse.getOtp(), otpRequest.getName());
         }
 
-
         return ResponseEntity.ok(otpResponse);
     }
 
