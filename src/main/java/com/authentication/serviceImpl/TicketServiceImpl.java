@@ -65,7 +65,7 @@ public class TicketServiceImpl implements TicketService {
                     ticket.isStatus()
             );
         } else {
-            return null; // Or throw an exception or handle differently based on your requirements
+            return null;
         }
     }
 

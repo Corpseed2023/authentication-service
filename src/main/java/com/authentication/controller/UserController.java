@@ -37,7 +37,6 @@ public class UserController {
     @PostMapping("/save")
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) {
 
-
         return this.userService.createUser(userRequest);
     }
 
