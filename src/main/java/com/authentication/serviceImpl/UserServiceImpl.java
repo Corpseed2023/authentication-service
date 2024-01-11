@@ -104,11 +104,13 @@ public class UserServiceImpl implements UserService {
         newUser.setEmail(signupRequest.getEmail());
         newUser.setRemoteAddress(remoteAddress);
 
-        if (!roles.isEmpty()) {
+        //        if (roles == null || roles.isEmpty()) {
+        if (roles.isEmpty()) {
+
             // If roles are zero, null, or empty, check if the user is signing up for the first time
             if (isFirstTimeSignup(newUser)) {
                 // If first time, assign the SUBSCRIBER role by default
-                Roles subscriberRole = roleRepository.findByRole("SUPER_ADMIN");
+                Roles subscriberRole = roleRepository.findByRole("SUPER ADMIN");
 
                 if (subscriberRole == null) {
                     // If SUBSCRIBER role does not exist, return a bad request with an error message
@@ -139,7 +141,6 @@ public class UserServiceImpl implements UserService {
 
         return new ResponseEntity<MessageResponse>().ok(new MessageResponse("Signup Success"));
     }
-
 
     // Check if the user is signing up for the first time
     private boolean isFirstTimeSignup(User user) {
