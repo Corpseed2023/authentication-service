@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
         // Set remote address in the new user
         String remoteAddress = httpServletRequest.getRemoteAddr();
 
+
         // Find OTP and check if it's valid
         OTP otp = otpService.findOtpByEmailAndOtpCode(signupRequest.getEmail(), signupRequest.getOtp());
         if (otp == null) {
