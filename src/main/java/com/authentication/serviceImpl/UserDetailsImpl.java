@@ -21,15 +21,21 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private Boolean isAssociated;
+
+    private Boolean isSubscribed;
+
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password,
+    public UserDetailsImpl(Long id, String username, String email, String password,Boolean isAssociated,Boolean isSubscribed,
                                   Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.isSubscribed=isSubscribed;
+        this.isAssociated=isAssociated;
     }
 
     public static UserDetailsImpl build(User user) {
@@ -41,7 +47,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getId(),
                 user.getMobile(),
                 user.getEmail(),
-                user.getPassword(),
+                user.getPassword(),user.isAssociated(),user.isSubscribed(),
                 authorities);
     }
 
@@ -86,5 +92,21 @@ public class UserDetailsImpl implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public Boolean getAssociated() {
+        return isAssociated;
+    }
+
+    public Boolean getSubscribed() {
+        return isSubscribed;
+    }
+
+    public void setSubscribed(Boolean subscribed) {
+        isSubscribed = subscribed;
+    }
+
+    public void setAssociated(Boolean associated) {
+        isAssociated = associated;
     }
 }

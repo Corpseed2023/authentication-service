@@ -49,4 +49,17 @@ public class CommonUtil {
     public static String encodePassword(String password) {
         return new BCryptPasswordEncoder().encode(password);
     }
+
+    public static boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
+
+    public static boolean isValidName(String name) {
+        // Allow only letters (both upper and lower case)
+        String nameRegex = "^[a-zA-Z]+$";
+        return name.matches(nameRegex);
+    }
+
+
 }

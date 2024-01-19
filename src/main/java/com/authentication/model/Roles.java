@@ -1,5 +1,6 @@
 package com.authentication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
@@ -22,6 +23,8 @@ public class  Roles {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+
     private Long id ;
 
     @NotNull
@@ -41,8 +44,13 @@ public class  Roles {
     @Comment(value = "1 : Active, 0 : Inactive")
     private boolean isEnable;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
+    private long superAdminId;
+
+
+
+
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<User> users = new HashSet<>();
 
 //    @ManyToMany(fetch = FetchType.EAGER)
 //    @JoinTable(

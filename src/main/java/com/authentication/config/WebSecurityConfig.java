@@ -35,8 +35,8 @@ public class WebSecurityConfig {
             "/api/auth/**","/api/createEnquiry","/api/auth/user/getUserId,",
             "/api/auth/user/updateIsAssociated",
             "/companyServices/**",
-            "/api/auth/user","/companyServices/**",
-            "/company/**"
+            "/api/auth/user/**","/companyServices/**",
+            "/company/**","/api/auth/user/createTeamMember"
     };
 
     @Bean

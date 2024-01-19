@@ -85,10 +85,11 @@ public class AuthController {
                 ipaddressdetails.get(1),ipaddressdetails.get(2));
 
         return new ResponseEntity().ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+                        userDetails.getId(),
+                        userDetails.getUsername(),
+                        userDetails.getEmail(),
+                        roles,
+                        userDetails.getAssociated(),userDetails.getSubscribed()));
     }
 
     private List<String> getSystemIPAddress() {

@@ -5,6 +5,7 @@ import com.authentication.exception.UserNotFoundException;
 import com.authentication.model.User;
 import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.ResponseEntity;
+import com.authentication.payload.response.UserResponse;
 import com.authentication.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.net.MalformedURLException;
 
 
@@ -37,13 +36,12 @@ public class UserController {
     })
     @PostMapping("/save")
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) {
+
         return this.userService.createUser(userRequest);
     }
 
-
     @PostMapping("/forgot-password")
     public ResponseEntity<?> validateEmailAndSendOTP(@RequestParam String email) {
-
 
 //        forgotPasswordService.generateAndSendOTP(email);
         return userService.checkUserExistanceAndSendOTP(email);
@@ -77,9 +75,6 @@ public class UserController {
         }
     }
 
-
-
-
     @GetMapping("/reset-password")
     public String showResetPasswordForm(@RequestParam String emails, Model model) {
         model.addAttribute("emails", emails);
@@ -88,13 +83,22 @@ public class UserController {
 
 
     @PostMapping("/createTeamMember")
-    public ResponseEntity<?> createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
-        return this.userService.createTeamMemberUser(userRequest);
+    public UserResponse createTeamMemberUsers(@RequestBody UserRequest userRequest) throws MalformedURLException {
+       System.out.println("Testing  hhhh. .  ");
+       return this.userService.createTeamMemberUser(userRequest);
     }
-
 
     @GetMapping("/getUserId")
     public User getUserById(@RequestParam Long userId) {
         return this.userService.getUserById(userId);
+    }
+
+    @PutMapping("/update-associated-isSubscribed")
+    public ResponseEntity<?> updateUserExistInCompany(Long userId, boolean isAssociated,
+                                                      boolean isSubscribed) {
+
+        userService.updateIsAssociatedAndIsSubscribe(userId,isAssociated,isSubscribed);
+
+        return new ResponseEntity().ok("User Association Done");
     }
 }

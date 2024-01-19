@@ -13,7 +13,8 @@ public class ResponseEntity<T> {
 
   private Date currentTimeStamp=new Date();
 
-  public ResponseEntity notFound(Class entity) {
+
+    public ResponseEntity notFound(Class entity) {
     setMessage(entity.getSimpleName() + " not Found");
     setStatus(HttpStatus.NOT_FOUND);
     setStatusCode(HttpStatus.NOT_FOUND.value());
