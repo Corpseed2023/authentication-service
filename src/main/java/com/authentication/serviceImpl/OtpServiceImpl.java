@@ -4,14 +4,17 @@ import com.authentication.model.OTP;
 import com.authentication.payload.request.OtpResponse;
 import com.authentication.payload.response.ResponseEntity;
 import com.authentication.repository.OtpRepository;
+import com.authentication.repository.UserRepository;
 import com.authentication.service.OtpService;
 import com.authentication.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -27,6 +30,9 @@ public class OtpServiceImpl implements OtpService {
     private OtpRepository otpRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
@@ -36,43 +42,21 @@ public class OtpServiceImpl implements OtpService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
-
-//    @Override
-//    public OtpResponse generateOtp(String email, String name,String password) {
-//        String otpCode = CommonUtil.generateOTP(6);
-//
-//        OTP otp = this.otpRepository.findByEmailContaining
-//                (email.length() > 10 ? email.trim().substring(email.length() - 10)
-//                        : email.trim()).orElse(new OTP().builder().email(email.trim())
-//                .otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
-//                .expiredAt(CommonUtil.getExpiryDateTime()).build());
-//        System.out.println("otp====="+otp);
-//
-//        if(otp.getId()!=null&&otp.getId()>0){
-//            otp.setCount(otp.getCount()+1);
-//            otp.setOtpCode(otpCode);
-//            otp.setName(name);
-//            otp.setPassword(new BCryptPasswordEncoder().encode(password));
-//            otp.setExpiredAt(CommonUtil.getExpiryDateTime());
-//        };
-//
-//        OTP save = this.otpRepository.save(otp);
-//
-//        if(save!=null)
-//            return OtpResponse.builder().email(email).otp(otpCode).build();
-//        else return null;
-//    }
-
     @Override
     public OtpResponse generateOtp(String email, String name, String password) {
+
+        // Check if user with the given email already exists
+        if (userRepository.findByEmail(email).isPresent()) {
+            // User already exists, throw 403 error
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User with email " + email + " already exists");
+        }
 
         Optional<OTP> existingOtpOptional = this.otpRepository.findByEmailContaining(email);
 
         String otpCode = CommonUtil.generateOTP(6);
 
         if (existingOtpOptional.isPresent()) {
-
-            // OTP record already exists for the email
+            // Existing OTP record for the email
             OTP existingOtp = existingOtpOptional.get();
             existingOtp.setCount(existingOtp.getCount() + 1);
             existingOtp.setOtpCode(otpCode);
@@ -86,10 +70,9 @@ public class OtpServiceImpl implements OtpService {
                 return new OtpResponse(email, otpCode);
             } else {
                 // Handle update failure
-                return null;
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update OTP record");
             }
         } else {
-
             // No existing OTP record, create a new one
             OTP newOtp = new OTP();
             newOtp.setEmail(email.trim());
@@ -107,7 +90,7 @@ public class OtpServiceImpl implements OtpService {
                 return new OtpResponse(email, otpCode);
             } else {
                 // Handle save failure
-                return null;
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save new OTP record");
             }
         }
     }

@@ -9,6 +9,7 @@ import com.authentication.payload.request.SignupRequest;
 import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.MessageResponse;
 import com.authentication.payload.response.ResponseEntity;
+import com.authentication.payload.response.UserResponse;
 import com.authentication.repository.RoleRepository;
 import com.authentication.repository.SubscriptionRepository;
 import com.authentication.repository.UserRepository;
@@ -183,7 +184,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> createTeamMemberUser(UserRequest userRequest)  {
+    public ResponseEntity<UserResponse> createTeamMemberUser(UserRequest userRequest)  {
 
         User saveUser = new User();
         saveUser.setFirstName(userRequest.getFirstName());
