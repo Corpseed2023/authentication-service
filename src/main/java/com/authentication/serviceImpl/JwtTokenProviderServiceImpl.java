@@ -1,6 +1,6 @@
 package com.authentication.serviceImpl;
 
-import com.authentication.constant.SecurityConstants;
+import  com.authentication.constant.SecurityConstants;
 import com.authentication.service.JwtTokenProviderService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

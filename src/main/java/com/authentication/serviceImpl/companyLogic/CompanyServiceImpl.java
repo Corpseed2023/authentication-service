@@ -18,7 +18,10 @@ import com.authentication.repository.team.TeamMemberRepository;
 import com.authentication.service.companyService.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -369,51 +372,62 @@ public class CompanyServiceImpl implements CompanyService {
 //        return companyBusinessUnitDtos;
 //    }
 //
-//    @Override
-//    public CompanyResponse getCompanyData(Long companyId) {
-//        Optional<Company> companyOptional = companyRepository.findById(companyId);
-//        if (companyOptional.isPresent()) {
-//            Company company = companyOptional.get();
-//            // Convert Company entity to CompanyResponse DTO
-//            CompanyResponse companyResponse = convertToCompanyResponse(company);
-//            return companyResponse;
-//        } else {
-//            throw new NotFoundException("Company with ID " + companyId + " not found");
-//        }
-//    }
-//
-//    // Other service methods
-//
-//    private CompanyResponse convertToCompanyResponse(Company company) {
-//
-//        return new CompanyResponse(
-//                company.getId(),
-//                company.getUserId(),
-//                company.getCompanyType(),
-//                company.getCompanyName(),
-//                company.getFirstName(),
-//                company.getLastName(),
-//                company.getBusinessEmailId(),
-//                company.getDesignation(),
-//                company.getState(),
-//                company.getCity(),
-//                company.getRegistrationNumber(),
-//                company.getRegistrationDate(),
-//                company.getCinNumber(),
-//                company.getRemarks(),
-//                company.getPinCode(),
-//                company.getTurnover(),
-//                company.getLocatedAt(),
-//                company.getBusinessActivityName(),
-//                company.getCreatedAt(),
-//                company.getUpdatedAt(),
-//                company.isEnable(),
-//                company.getPermanentEmployee(),
-//                company.getContractEmployee(),
-//                company.getGstNumber(),
-//                company.getOperationUnitAddress()
-//        );
-//    }
+    @Override
+    public CompanyResponse getCompanyData(Long companyId) {
+        Optional<Company> companyOptional = companyRepository.findById(companyId);
+
+        if (!companyOptional(companyId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Company is not active. Cannot create Business Unit.");
+        }
+
+
+        if (companyOptional.isPresent()) {
+            Company company = companyOptional.get();
+            // Convert Company entity to CompanyResponse DTO
+            CompanyResponse companyResponse = convertToCompanyResponse(company);
+            return companyResponse;
+        } else {
+            throw new NotFoundException("Company with ID " + companyId + " not found");
+        }
+    }
+
+    private boolean companyOptional(Long companyId) {
+        Optional<Company> companyData = companyRepository.findById(companyId);
+        return companyData.map(Company::isEnable).orElse(false);
+    }
+
+    // Other service methods
+
+    private CompanyResponse convertToCompanyResponse(Company company) {
+
+        return new CompanyResponse(
+                company.getId(),
+                company.getUserId(),
+                company.getCompanyType(),
+                company.getCompanyName(),
+                company.getFirstName(),
+                company.getLastName(),
+                company.getBusinessEmailId(),
+                company.getDesignation(),
+                company.getState(),
+                company.getCity(),
+                company.getRegistrationNumber(),
+                company.getRegistrationDate(),
+                company.getCinNumber(),
+                company.getRemarks(),
+                company.getPinCode(),
+                company.getTurnover(),
+                company.getLocatedAt(),
+                company.getBusinessActivityName(),
+                company.getCreatedAt(),
+                company.getUpdatedAt(),
+                company.isEnable(),
+                company.getPermanentEmployee(),
+                company.getContractEmployee(),
+                company.getGstNumber(),
+                company.getOperationUnitAddress()
+        );
+    }
 }
 
 

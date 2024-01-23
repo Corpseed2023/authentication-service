@@ -3,6 +3,7 @@ package com.authentication.payload.response;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -35,4 +36,7 @@ public class UserResponse {
     private boolean isAssociated;
 
     private Long userId;
+
+    private List<String> roles;
+
 }

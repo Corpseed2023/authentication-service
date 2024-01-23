@@ -1,4 +1,4 @@
-package com.authentication.controller;
+package com.authentication.controller.loginController;
 
 import com.authentication.payload.request.TokenRequest;
 import com.authentication.payload.response.JwtResponse;
@@ -15,18 +15,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,9 +47,6 @@ public class AuthController {
     @Autowired
     private OtpServiceImpl otpServiceImpl;
 
-//    public AuthController() throws IOException {
-//    }
-
     @ApiOperation(value = "generate token",
             notes = "Return generated token", response = ResponseEntity.class, responseContainer = "List")
     @ApiResponses(value = {
@@ -63,11 +59,6 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(tokenRequest.getUsername(), tokenRequest.getPassword()));
 
-//        String clientIp = getClientIp(request);
-
-        System.out.println(request);
-
-        System.out.println("Hit");
 
         System.out.println(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -91,9 +82,39 @@ public class AuthController {
                 roles));
     }
 
-    private List<String> getSystemIPAddress() {
 
-//        List<String> ipAddressInfoList = new ArrayList<>();
+
+//    @GetMapping("/logout")
+//    public String fetchSignoutSite(HttpServletRequest request, HttpServletResponse response){
+//
+//        HttpSession session = request.getSession(false);
+//        SecurityContextHolder.clearContext();
+//
+//        session = request.getSession(false);
+//        if(session != null) {
+//            session.invalidate();
+//        }
+//
+//        for(Cookie cookie : request.getCookies()) {
+//            cookie.setMaxAge(0);
+//        }
+//
+//        return "Logout Successfully Done";
+//    }
+
+
+    @GetMapping("/logout")
+    public String fetchSignoutSite(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
+        return "Logout Successfully Done";
+    }
+
+
+    private List<String> getSystemIPAddress() {
 
         try {
 
@@ -121,4 +142,6 @@ public class AuthController {
             return new ArrayList<>(); // handle other exceptions appropriately in your application
         }
     }
+
+
 }

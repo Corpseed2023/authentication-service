@@ -1,4 +1,4 @@
-package com.authentication.controller;
+package com.authentication.controller.signUpController;
 
 import com.authentication.payload.request.SignupRequest;
 import com.authentication.payload.response.ResponseEntity;

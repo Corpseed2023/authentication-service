@@ -4,13 +4,17 @@ package com.authentication.controller.businessUnitController;
 
 import com.authentication.dto.businessUnitDto.BusinessUnitRequest;
 import com.authentication.dto.businessUnitDto.BusinessUnitResponse;
+import com.authentication.model.companyModel.Company;
+import com.authentication.repository.companyRepo.CompanyRepository;
 import com.authentication.service.businessService.BusinessUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -22,13 +26,16 @@ public class BusinessUnitController {
     @Autowired
     private BusinessUnitService businessUnitService;
 
+
+
     @PostMapping("/saveBusinessUnit")
     public ResponseEntity<BusinessUnitResponse> createBusinessUnit(
             @RequestBody BusinessUnitRequest businessUnitRequest,
             @RequestParam Long companyId)
     {
-        try{
-            BusinessUnitResponse savedBusinessData= businessUnitService.createBusinessUnit(businessUnitRequest,companyId);
+        try {
+
+            BusinessUnitResponse savedBusinessData = businessUnitService.createBusinessUnit(businessUnitRequest, companyId);
             return new ResponseEntity<>(savedBusinessData, HttpStatus.CREATED);
 
         } catch (Exception e)  {
@@ -36,6 +43,7 @@ public class BusinessUnitController {
         }
 
     }
+
 
 //    @PutMapping("/updateBusinessUnit/{id}")
     @PutMapping("/updateBusinessUnit")

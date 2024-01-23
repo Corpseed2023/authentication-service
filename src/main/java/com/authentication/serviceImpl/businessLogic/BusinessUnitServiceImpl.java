@@ -29,8 +29,6 @@ public class BusinessUnitServiceImpl implements BusinessUnitService {
     @Autowired
     private CompanyRepository companyRepository;
 
-//    @Autowired
-//    private TeamRepository teamRepository;
 
 
     @Override
@@ -38,23 +36,14 @@ public class BusinessUnitServiceImpl implements BusinessUnitService {
 
         Optional<Company> companyData = companyRepository.findById(companyId);
 
+        if (!isCompanyEnabled(companyId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Company is not active. Cannot create Business Unit.");
+        }
+
         if (companyData.isPresent()) {
             BusinessUnit existingBusinessUnit = businessUnitRepository.findByAddress(businessUnitRequest.getAddress());
 
             if (existingBusinessUnit == null) {
-
-//                Set<Team> teams = new HashSet<>();
-
-//                if (businessUnitRequest.getTeamIds() != null && !businessUnitRequest.getTeamIds().isEmpty()) {
-//                    for (Long teamId : businessUnitRequest.getTeamIds()) {
-//                        Optional<Team> teamOptional = teamRepository.findById(teamId);
-//                        if (teamOptional.isPresent()) {
-//                            teams.add(teamOptional.get());
-//                        } else {
-//                            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with ID " + teamId + " not found");
-//                        }
-//                    }
-//                }
 
                 BusinessUnit newBusinessUnit = new BusinessUnit();
 
@@ -72,13 +61,10 @@ public class BusinessUnitServiceImpl implements BusinessUnitService {
                 newBusinessUnit.setDateRegistration(businessUnitRequest.getDateRegistration());
                 newBusinessUnit.setStates(businessUnitRequest.getStates());
                 newBusinessUnit.setGstNumber(businessUnitRequest.getGstNumber());
-//                newBusinessUnit.setTeams(teams);
 
                 BusinessUnit savedBusinessUnit = businessUnitRepository.save(newBusinessUnit);
 
-//                List<Long> savedTeamIds = savedBusinessUnit.getTeams().stream()
-//                        .map(Team::getId)
-//                        .collect(Collectors.toList());
+
 
                 // Create and return a response
                 BusinessUnitResponse response = new BusinessUnitResponse();
@@ -107,12 +93,20 @@ public class BusinessUnitServiceImpl implements BusinessUnitService {
         return null;
     }
 
+    private boolean isCompanyEnabled(Long companyId) {
+        Optional<Company> companyData = companyRepository.findById(companyId);
+        return companyData.map(Company::isEnable).orElse(false);
+    }
 
 
     @Override
     public BusinessUnitResponse updateBusinessUnit(Long companyId, Long businessUnitId, BusinessUnitRequest businessUnitRequest) {
         // Check if the GST data exists
         Optional<Company> companyData = companyRepository.findById(companyId);
+
+        if (!isCompanyEnabled(companyId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Company is not active. Cannot create Business Unit.");
+        }
 
         if (!companyData.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with ID: " + companyId);
@@ -208,7 +202,12 @@ public class BusinessUnitServiceImpl implements BusinessUnitService {
 
     @Override
     public List<BusinessUnitResponse> getAllBusinessUnits(Long companyId) {
+
+        if (!isCompanyEnabled(companyId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Company is not active. Cannot create Business Unit.");
+        }
         List<BusinessUnit> businessUnits = businessUnitRepository.findByCompanyId(companyId);
+
         List<BusinessUnitResponse> businessUnitResponses = new ArrayList<>();
 
         for (BusinessUnit businessUnit : businessUnits) {

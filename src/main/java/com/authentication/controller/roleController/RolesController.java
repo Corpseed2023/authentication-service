@@ -1,4 +1,4 @@
-package com.authentication.controller;
+package com.authentication.controller.roleController;
 
 import com.authentication.model.Roles;
 import com.authentication.payload.response.ResponseEntity;

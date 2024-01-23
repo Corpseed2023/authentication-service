@@ -59,9 +59,9 @@ public class CompanyController {
 //        return companyService.getCompanyUnitComplianceDetails(userId);
 //    }
 //
-//    @GetMapping("/getCompanyDataForTasks")
-//    public CompanyResponse getCompanyData(@RequestParam Long companyId) {
-//        return companyService.getCompanyData(companyId);
-//    }
+    @GetMapping("/getCompanyDataForTasks")
+    public CompanyResponse getCompanyData(@RequestParam Long companyId) {
+        return companyService.getCompanyData(companyId);
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.authentication.controller;
+package com.authentication.controller.enquiryController;
 
 import com.authentication.model.Enquiry;
 import com.authentication.payload.response.ResponseEntity;

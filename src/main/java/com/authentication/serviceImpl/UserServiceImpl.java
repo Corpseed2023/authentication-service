@@ -30,6 +30,7 @@ import javax.mail.internet.MimeMessage;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -225,11 +226,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long userId) {
-         Optional<User>u=userRepository.findById(userId);
-         return u.get();
-    }
+    public UserResponse getUserById(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
 
+        if (userOptional.isPresent()) {
+            return mapUserToUserResponse(userOptional.get());
+        } else {
+            // Handle the case where the user is not present (You can throw an exception or return a suitable response)
+            throw new NoSuchElementException("User not found with id: " + userId);
+        }
+
+    }
+    private UserResponse mapUserToUserResponse(User user) {
+        List<String> roleNames = user.getRoles().stream()
+                .map(Roles::getRole)
+                .collect(Collectors.toList());
+        System.out.println(roleNames);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .mobile(user.getMobile())
+                .designation(user.getDesignation())
+                .resourceType(user.getResourceType())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .isEnable(user.isEnable())
+                .isAssociated(user.isAssociated())
+                .userId(user.getId())
+                .roles(roleNames)
+                .build();
+    }
 
 
     @Override

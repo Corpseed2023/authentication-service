@@ -1,4 +1,4 @@
-package com.authentication.controller;
+package com.authentication.controller.otpController;
 
 //import com.authentication.model.SignupUser;
 import com.authentication.payload.request.OtpRequest;

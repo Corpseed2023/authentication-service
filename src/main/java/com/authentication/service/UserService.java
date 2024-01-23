@@ -22,7 +22,7 @@ public interface UserService {
 
     ResponseEntity<UserResponse> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException;
 
-    User getUserById(Long userId);
+    UserResponse getUserById(Long userId);
 
     ResponseEntity<?> updateUser(Long userId, UserRequest updatedUserRequest);
 

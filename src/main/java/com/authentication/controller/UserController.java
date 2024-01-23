@@ -96,7 +96,9 @@ public class UserController {
 
 
     @GetMapping("/getUserId")
-    public User getUserById(@RequestParam Long userId) {
+    public UserResponse getUserById(@RequestParam Long userId) {
         return this.userService.getUserById(userId);
     }
+
+
 }

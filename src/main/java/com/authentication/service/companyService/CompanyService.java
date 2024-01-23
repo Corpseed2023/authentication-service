@@ -21,6 +21,6 @@ public interface CompanyService {
 //
 //    List<CompanyBusinessUnitDto> getCompanyUnitComplianceDetails(Long userId);
 //
-//    CompanyResponse getCompanyData(Long companyId);
+    CompanyResponse getCompanyData(Long companyId);
 
 }

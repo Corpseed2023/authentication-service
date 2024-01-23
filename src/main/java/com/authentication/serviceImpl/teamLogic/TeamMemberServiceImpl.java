@@ -6,10 +6,12 @@ import com.authentication.controller.UserController;
 import com.authentication.dto.teamMemberDto.TeamMemberDetailsResponse;
 import com.authentication.dto.teamMemberDto.TeamMemberRequest;
 import com.authentication.dto.teamMemberDto.TeamMemberResponse;
+import com.authentication.model.Roles;
 import com.authentication.model.User;
 import com.authentication.model.companyModel.Company;
 import com.authentication.model.teamMemberModel.TeamMember;
 import com.authentication.payload.response.ResponseEntity;
+import com.authentication.repository.RoleRepository;
 import com.authentication.repository.UserRepository;
 import com.authentication.repository.companyRepo.CompanyRepository;
 import com.authentication.repository.team.TeamMemberRepository;
@@ -17,6 +19,7 @@ import com.authentication.service.teamService.TeamMemberService;
 import com.authentication.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -37,6 +40,9 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 
     @Autowired
     private PasswordController passwordController;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private CompanyRepository companyRepository;
@@ -63,21 +69,27 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         String randomPassword = passwordController.generateRandomPassword();
 
 
-        if (userData == null) {
+        if (!userData.isPresent()) {
             throw new IllegalArgumentException("User not found with ID: " + createdById);
         }
-
         User saveUser = new User();
-
 
         saveUser.setFirstName(teamMemberRequest.getMemberName());
         saveUser.setEmail(teamMemberRequest.getMemberMail());
         saveUser.setMobile(teamMemberRequest.getMemberMobile());
-        saveUser.setPassword(randomPassword);
+        saveUser.setPassword(new BCryptPasswordEncoder().encode(randomPassword));
         saveUser.setResourceType(teamMemberRequest.getTypeOfResource());
         saveUser.setCreatedAt(CommonUtil.getDate());
         saveUser.setUpdatedAt(CommonUtil.getDate());
-       User savedUser = userRepository.save(saveUser);
+        Set<Roles> roles = new HashSet<>();
+        String roleName = teamMemberRequest.getAccessTypeName();
+        Roles role = roleRepository.findByRole(roleName);
+        roles.add(role);
+
+        saveUser.setRoles(roles);
+
+
+        User savedUser = userRepository.save(saveUser);
 
 
         MimeMessage message = javaMailSender.createMimeMessage();
