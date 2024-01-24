@@ -101,4 +101,13 @@ public class UserController {
     }
 
 
+    @PutMapping("/update-associated-isSubscribed")
+    public ResponseEntity<?> updateUserExistInCompany(Long userId, boolean isAssociated,
+                                                      boolean isSubscribed) {
+
+        userService.updateIsAssociatedAndIsSubscribe(userId,isAssociated,isSubscribed);
+
+        return new ResponseEntity().ok("User Association Done");
+    }
+
 }

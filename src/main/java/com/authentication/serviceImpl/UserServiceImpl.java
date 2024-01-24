@@ -17,18 +17,14 @@ import com.authentication.service.OtpService;
 import com.authentication.service.UserService;
 import com.authentication.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,7 +74,18 @@ public class UserServiceImpl implements UserService {
         newUser.setEnable(true);
         newUser.setEmail(signupRequest.getEmail());
 
-        newUser.setRoles(userRoleData(signupRequest.getRoleList()));
+        Set<Roles> roles = userRoleData(signupRequest.getRoleList());
+
+        if (roles.isEmpty())
+        {
+            return new ResponseEntity<String>().badRequest(("Roles is not present in Role Block"));
+        }
+
+        else
+        {
+            newUser.setRoles(roles);
+
+        }
 
         userRepository.save(newUser);
 
@@ -102,7 +109,7 @@ public class UserServiceImpl implements UserService {
         System.out.println(roles);
 
         return new HashSet<>(roles);
-    }//we want
+    }
 
     @Override
     public ResponseEntity<?> createUser(UserRequest userRequest) {
@@ -229,10 +236,18 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
 
+
         if (userOptional.isPresent()) {
-            return mapUserToUserResponse(userOptional.get());
+            User user = userOptional.get();
+
+            if (!user.isEnable()) {
+                // Handle the case where the user is not enabled (inactive)
+                throw new IllegalStateException("User is not active with id: " + userId);
+            }
+
+            return mapUserToUserResponse(user);
         } else {
-            // Handle the case where the user is not present (You can throw an exception or return a suitable response)
+            // Handle the case where the user is not present
             throw new NoSuchElementException("User not found with id: " + userId);
         }
 
@@ -304,4 +319,24 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User not found");
         }
     }
+
+    @Override
+    public ResponseEntity<?> updateIsAssociatedAndIsSubscribe(Long userId, boolean isAssociated,
+                                                              boolean isSubscribed) {
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            existingUser.setAssociated(isAssociated);
+            existingUser.setSubscribed(isSubscribed);
+
+            // Save the updated user with the new isAssociated value
+            userRepository.save(existingUser);
+
+            return new ResponseEntity<User>().ok(existingUser);
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+    }
 }
+

@@ -77,8 +77,13 @@ public class  User {
 	@JoinColumn(name = "subscription")
 	private Subscription subscription;
 
+	private boolean isSubscribed;
+
 
 	public Set<Roles> getRoles() {
 		return roles;
 	}
+
+
+
 }
