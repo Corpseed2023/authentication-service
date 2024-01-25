@@ -82,10 +82,10 @@ public class BusinessUnitController {
 
 
     @GetMapping("/fetchBusinessData")
-    public ResponseEntity<BusinessUnitResponse> getBusinessUnitData(@RequestParam Long businessUnitId) {
+    public BusinessUnitResponse getBusinessUnitData(@RequestParam Long businessUnitId) {
         BusinessUnitResponse businessUnitResponse = businessUnitService.getBusinessUnitData(businessUnitId);
 
-       return  ResponseEntity.ok(businessUnitResponse);
+       return businessUnitResponse;
     }
 
 //    @GetMapping("/getAllBusinessUnitsWithAllCompany")
