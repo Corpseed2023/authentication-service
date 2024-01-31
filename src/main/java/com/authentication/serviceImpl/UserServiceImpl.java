@@ -205,6 +205,7 @@ public class UserServiceImpl implements UserService {
         saveUser.setCreatedAt(CommonUtil.getDate());
         saveUser.setUpdatedAt(CommonUtil.getDate());
         saveUser.setRoles(userRequest.getRoles());
+        saveUser.setEnable(true);
         this.userRepository.save(saveUser);
 
 

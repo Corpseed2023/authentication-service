@@ -79,6 +79,8 @@ public class  User {
 
 	private boolean isSubscribed;
 
+	private Long companyId;
+
 
 	public Set<Roles> getRoles() {
 		return roles;

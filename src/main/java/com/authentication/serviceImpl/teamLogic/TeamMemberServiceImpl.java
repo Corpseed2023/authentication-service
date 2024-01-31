@@ -2,7 +2,7 @@ package com.authentication.serviceImpl.teamLogic;
 
 
 import com.authentication.controller.PasswordController;
-import com.authentication.controller.UserController;
+import com.authentication.controller.userController.UserController;
 import com.authentication.dto.teamMemberDto.TeamMemberDetailsResponse;
 import com.authentication.dto.teamMemberDto.TeamMemberRequest;
 import com.authentication.dto.teamMemberDto.TeamMemberResponse;
@@ -10,7 +10,6 @@ import com.authentication.model.Roles;
 import com.authentication.model.User;
 import com.authentication.model.companyModel.Company;
 import com.authentication.model.teamMemberModel.TeamMember;
-import com.authentication.payload.response.ResponseEntity;
 import com.authentication.repository.RoleRepository;
 import com.authentication.repository.UserRepository;
 import com.authentication.repository.companyRepo.CompanyRepository;
@@ -23,12 +22,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,16 +63,38 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     public TeamMemberResponse createTeamMember(TeamMemberRequest teamMemberRequest,
                                                Long companyId, Long createdById) {
 
+        // Check if the company exists
+        Optional<Company> companySavedData = companyRepository.findById(companyId);
+
+        if (!companySavedData.isPresent()) {
+            throw new IllegalArgumentException("Company not found with ID: " + companyId);
+        }
+
+        Company companyData = companySavedData.get();
+
+        // Check if the user exists
         Optional<User> userData = userRepository.findById(createdById);
-
-        String randomPassword = passwordController.generateRandomPassword();
-
 
         if (!userData.isPresent()) {
             throw new IllegalArgumentException("User not found with ID: " + createdById);
         }
-        User saveUser = new User();
 
+        BigInteger userCount = userRepository.existsByEmailOrMobileAndCompanyId(
+                teamMemberRequest.getMemberMail(),
+                teamMemberRequest.getMemberMobile(),
+                companyId
+        );
+
+        if (userCount.intValue() > 0) {
+            throw new IllegalArgumentException("User with the same email or mobile number already exists for the given company");
+        }
+
+
+        // Generate a random password for the user
+        String randomPassword = passwordController.generateRandomPassword();
+
+        // Create and save a new user
+        User saveUser = new User();
         saveUser.setFirstName(teamMemberRequest.getMemberName());
         saveUser.setEmail(teamMemberRequest.getMemberMail());
         saveUser.setMobile(teamMemberRequest.getMemberMobile());
@@ -81,21 +102,21 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         saveUser.setResourceType(teamMemberRequest.getTypeOfResource());
         saveUser.setCreatedAt(CommonUtil.getDate());
         saveUser.setUpdatedAt(CommonUtil.getDate());
+        saveUser.setCompanyId(companyId);
+
+        // Set user roles
         Set<Roles> roles = new HashSet<>();
         String roleName = teamMemberRequest.getAccessTypeName();
         Roles role = roleRepository.findByRole(roleName);
         roles.add(role);
-
         saveUser.setRoles(roles);
 
-
+        // Save the user
         User savedUser = userRepository.save(saveUser);
 
-
+        // Send an email to the user
         MimeMessage message = javaMailSender.createMimeMessage();
-
         MimeMessageHelper helper = new MimeMessageHelper(message);
-
 
         try {
             helper.setFrom("kaushlendra.pratap@corpseed.com");
@@ -114,68 +135,53 @@ public class TeamMemberServiceImpl implements TeamMemberService {
             e.printStackTrace();
         }
 
-        Optional<Company> companySavedData = companyRepository.findById(companyId);
-
-        if (companySavedData.isPresent()) {
-            Company companyData = companySavedData.get();
-
-            companyData.getUserId();
-
-            try {
-                if (teamMemberRequest == null) {
-                    throw new NullPointerException("Please Enter Team Member Data");
-                }
-
-
-                TeamMember teamMember = new TeamMember();
-
-                teamMember.setMemberName(teamMemberRequest.getMemberName());
-                teamMember.setMemberMail(teamMemberRequest.getMemberMail());
-                teamMember.setMemberMobile(teamMemberRequest.getMemberMobile());
-                teamMember.setTypeOfResource(teamMemberRequest.getTypeOfResource());
-                teamMember.setCreatedAt(new Date());
-                teamMember.setUpdatedAt(new Date());
-                teamMember.setEnable(teamMemberRequest.isEnable());
-                teamMember.setAccessTypeName(teamMemberRequest.getAccessTypeName());
-                teamMember.setCompany(companyData);
-                teamMember.setSuperAdminId(companyData.getUserId());
-                teamMember.setReportingManagerId(companyData.getUserId());
-                teamMember.setUserId(savedUser.getId());
-
-
-                System.out.println("Got Hit");
-
-
-                teamMember = teamMemberRepository.save(teamMember);
-
-                TeamMemberResponse teamMemberResponse = new TeamMemberResponse();
-                teamMemberResponse.setMemberMail(teamMember.getMemberMail());
-                teamMemberResponse.setMemberName(teamMember.getMemberName());
-                teamMemberResponse.setCreatedAt(teamMember.getCreatedAt());
-                teamMemberResponse.setUpdatedAt(teamMember.getUpdatedAt());
-                teamMemberResponse.setEnable(teamMember.isEnable());
-                teamMemberResponse.setMemberMobile(teamMember.getMemberMobile());
-                teamMemberResponse.setTypeOfResource(teamMember.getTypeOfResource());
-                teamMemberResponse.setAccessTypeName(teamMember.getAccessTypeName());
-
-                teamMemberResponse.setReportingManagerId(teamMember.getId());
-                teamMemberResponse.setUserId(teamMember.getUserId());
-
-
-
-                System.out.println("Got Wokring Authentication Hit");
-
-                return teamMemberResponse;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                throw new RuntimeException("Failed to create team members");
+        try {
+            // Check if the team member request is null
+            if (teamMemberRequest == null) {
+                throw new NullPointerException("Please Enter Team Member Data");
             }
-        } else {
-            throw new IllegalArgumentException("Company not found with ID: " + companyId);
+
+            // Create and save a new team member
+            TeamMember teamMember = new TeamMember();
+            teamMember.setMemberName(teamMemberRequest.getMemberName());
+            teamMember.setMemberMail(teamMemberRequest.getMemberMail());
+            teamMember.setMemberMobile(teamMemberRequest.getMemberMobile());
+            teamMember.setTypeOfResource(teamMemberRequest.getTypeOfResource());
+            teamMember.setCreatedAt(new Date());
+            teamMember.setUpdatedAt(new Date());
+            teamMember.setEnable(teamMemberRequest.isEnable());
+            teamMember.setAccessTypeName(teamMemberRequest.getAccessTypeName());
+            teamMember.setCompany(companyData);
+            teamMember.setSuperAdminId(companyData.getUserId());
+            teamMember.setReportingManagerId(companyData.getUserId());
+            teamMember.setUserId(savedUser.getId());
+
+            // Save the team member
+            teamMember = teamMemberRepository.save(teamMember);
+
+            // Create and return a TeamMemberResponse
+            TeamMemberResponse teamMemberResponse = new TeamMemberResponse();
+            teamMemberResponse.setMemberMail(teamMember.getMemberMail());
+            teamMemberResponse.setMemberName(teamMember.getMemberName());
+            teamMemberResponse.setCreatedAt(teamMember.getCreatedAt());
+            teamMemberResponse.setUpdatedAt(teamMember.getUpdatedAt());
+            teamMemberResponse.setEnable(teamMember.isEnable());
+            teamMemberResponse.setMemberMobile(teamMember.getMemberMobile());
+            teamMemberResponse.setTypeOfResource(teamMember.getTypeOfResource());
+            teamMemberResponse.setAccessTypeName(teamMember.getAccessTypeName());
+            teamMemberResponse.setReportingManagerId(teamMember.getId());
+            teamMemberResponse.setUserId(teamMember.getUserId());
+
+            return teamMemberResponse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            throw new RuntimeException("Failed to create team members");
         }
     }
+
+
 
     @Override
     public TeamMemberResponse updateTeamMember(Long id, TeamMemberRequest teamMemberRequest) {

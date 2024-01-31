@@ -1,4 +1,4 @@
-package com.authentication.controller;
+package com.authentication.controller.userController;
 
 
 import com.authentication.exception.UserNotFoundException;
