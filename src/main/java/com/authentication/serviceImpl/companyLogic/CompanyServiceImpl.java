@@ -1,11 +1,10 @@
 package com.authentication.serviceImpl.companyLogic;
 
 
-import com.authentication.dto.companyDto.CompanyRequest;
-import com.authentication.dto.companyDto.CompanyResponse;
-import com.authentication.dto.companyDto.CompanyResponseDetails;
+import com.authentication.dto.companyDto.*;
 import com.authentication.exception.NotFoundException;
 import com.authentication.exception.UnauthorizedException;
+import com.authentication.feignClient.ComplianceMap;
 import com.authentication.model.Roles;
 import com.authentication.model.User;
 import com.authentication.model.businessUnitModel.BusinessUnit;
@@ -31,8 +30,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
-//    @Autowired
-//    private ComplianceMap complianceMap;
+    @Autowired
+    private ComplianceMap complianceMap;
 
     @Autowired
     private CompanyTypeRepository companyTypeRepository;
@@ -333,45 +332,46 @@ public class CompanyServiceImpl implements CompanyService {
 //        return result;
 //    }
 //
-//    public List<CompanyBusinessUnitDto> getCompanyUnitComplianceDetails(Long userId) {
-//
-//        List<Company> companies = companyRepository.findByUserId(userId);
-//
-//
-//        List<CompanyBusinessUnitDto> companyBusinessUnitDtos = new ArrayList<>();
-//
-//        List<Map<String, Object>> totalCompliance = complianceMap.getComplianceCountPerCompanyAndBusinessUnit();
-//
-//        for (Company company : companies) {
-//            for (BusinessUnit businessUnit : company.getBusinessUnits()) {
-//                CompanyBusinessUnitDto dto = new CompanyBusinessUnitDto();
-//                dto.setCompanyId(company.getId());
-//                dto.setCompanyName(company.getCompanyName());
-//                dto.setBusinessUnitId(businessUnit.getId());
-//                dto.setBusinessActivityName(businessUnit.getBusinessActivityName());
-//                dto.setBusinessUnitAddress(businessUnit.getAddress());
-//                dto.setLastUpdated(businessUnit.getUpdatedAt());
-//
-//                List<TotalComplianceDto> totalComplianceDtos = totalCompliance.stream()
-//                        .filter(map -> String.valueOf(company.getId()).equals(String.valueOf(map.get("companyId")))
-//                                && String.valueOf(businessUnit.getId()).equals(String.valueOf(map.get("businessUnitId"))))
-//                        .map(map -> {
-//                            TotalComplianceDto totalComplianceDto = new TotalComplianceDto();
-//                            totalComplianceDto.setTotalCompliance((int) map.get("complianceCount"));
-//                            return totalComplianceDto;
-//                        })
-//                        .collect(Collectors.toList());
-//
-//                dto.setTotalCompliance(totalComplianceDtos);
-//
-//
-//                companyBusinessUnitDtos.add(dto);
-//            }
-//        }
-//
-//        return companyBusinessUnitDtos;
-//    }
-//
+    public List<CompanyBusinessUnitDto> getCompanyUnitComplianceDetails(Long userId) {
+
+        List<Company> companies = companyRepository.findByUserId(userId);
+
+
+        List<CompanyBusinessUnitDto> companyBusinessUnitDtos = new ArrayList<>();
+
+        List<Map<String, Object>> totalCompliance = complianceMap.getComplianceCountPerCompanyAndBusinessUnit();
+
+        System.out.println(totalCompliance + "Total complinace");
+        for (Company company : companies) {
+            for (BusinessUnit businessUnit : company.getBusinessUnits()) {
+                CompanyBusinessUnitDto dto = new CompanyBusinessUnitDto();
+                dto.setCompanyId(company.getId());
+                dto.setCompanyName(company.getCompanyName());
+                dto.setBusinessUnitId(businessUnit.getId());
+                dto.setBusinessActivityName(businessUnit.getBusinessActivityName());
+                dto.setBusinessUnitAddress(businessUnit.getAddress());
+                dto.setLastUpdated(businessUnit.getUpdatedAt());
+
+                List<TotalComplianceDto> totalComplianceDtos = totalCompliance.stream()
+                        .filter(map -> String.valueOf(company.getId()).equals(String.valueOf(map.get("companyId")))
+                                && String.valueOf(businessUnit.getId()).equals(String.valueOf(map.get("businessUnitId"))))
+                        .map(map -> {
+                            TotalComplianceDto totalComplianceDto = new TotalComplianceDto();
+                            totalComplianceDto.setTotalCompliance((int) map.get("complianceCount"));
+                            return totalComplianceDto;
+                        })
+                        .collect(Collectors.toList());
+
+                dto.setTotalCompliance(totalComplianceDtos);
+
+
+                companyBusinessUnitDtos.add(dto);
+            }
+        }
+
+        return companyBusinessUnitDtos;
+    }
+
     @Override
     public CompanyResponse getCompanyData(Long companyId) {
         Optional<Company> companyOptional = companyRepository.findById(companyId);

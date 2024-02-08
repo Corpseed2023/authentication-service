@@ -10,8 +10,8 @@ import java.util.Map;
 @Service
 public interface ComplianceMap {
 
-    @GetMapping("/compliance/company/getComplianceCount")
-     Map<Long, Integer> getComplianceCount();
+//    @GetMapping("/compliance/company/getComplianceCount")
+//     Map<Long, Integer> getComplianceCount();
 
 
     @GetMapping("/compliance/company/compliance-count")

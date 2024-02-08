@@ -1,6 +1,7 @@
 package com.authentication.controller.companyController;
 
 
+import com.authentication.dto.companyDto.CompanyBusinessUnitDto;
 import com.authentication.dto.companyDto.CompanyRequest;
 import com.authentication.dto.companyDto.CompanyResponse;
 import com.authentication.dto.companyDto.CompanyResponseDetails;
@@ -53,12 +54,12 @@ public class CompanyController {
                     .body("Error while disabling company with ID " + id);
         }
     }
-//
-//    @GetMapping("/getCompanyUnitComplianceDetails")
-//    public List<CompanyBusinessUnitDto> getCompanyUnitComplianceDetails(@RequestParam Long userId) {
-//        return companyService.getCompanyUnitComplianceDetails(userId);
-//    }
-//
+
+    @GetMapping("/getCompanyUnitComplianceDetails")
+    public List<CompanyBusinessUnitDto> getCompanyUnitComplianceDetails(@RequestParam Long userId) {
+        return companyService.getCompanyUnitComplianceDetails(userId);
+    }
+
     @GetMapping("/getCompanyDataForTasks")
     public CompanyResponse getCompanyData(@RequestParam Long companyId) {
         return companyService.getCompanyData(companyId);
