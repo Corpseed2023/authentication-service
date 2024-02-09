@@ -13,7 +13,6 @@ public class JwtResponse {
 
   private Boolean subscribed;
 
-
   public JwtResponse(String token, Long id, String username, String email, List<String> roles, Boolean isAssociated,Boolean subscribed) {
 
     this.token=token;
