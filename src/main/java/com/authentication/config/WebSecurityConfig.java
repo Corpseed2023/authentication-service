@@ -36,7 +36,7 @@ public class WebSecurityConfig {
             "/api/auth/user/updateIsAssociated",
             "/companyServices/**",
             "/api/auth/user","/companyServices/**",
-            "/company/**"
+            "/company/**","/compliance/company/**"
     };
 
     @Bean
