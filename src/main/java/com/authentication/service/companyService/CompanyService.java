@@ -1,10 +1,7 @@
 package com.authentication.service.companyService;
 
 
-import com.authentication.dto.companyDto.CompanyBusinessUnitDto;
-import com.authentication.dto.companyDto.CompanyRequest;
-import com.authentication.dto.companyDto.CompanyResponse;
-import com.authentication.dto.companyDto.CompanyResponseDetails;
+import com.authentication.dto.companyDto.*;
 
 import java.util.List;
 
