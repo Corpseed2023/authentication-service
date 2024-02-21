@@ -8,9 +8,11 @@ import java.util.List;
 public interface CityService {
 
 
-    List<City> getAllCities();
+
 
     List<City> createOrUpdateCities(List<String> citiesName,Long stateId);
 
     void deleteCity(Long id);
+
+    List<City> getAllCitiesByStateId(Long stateId);
 }

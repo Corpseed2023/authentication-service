@@ -46,6 +46,8 @@ public class Company {
 	@Column(name = "company_type")
 	private String companyType;
 
+//	@ManyToOne
+//	private CompanyType companyType;
 
 	@Column(name = "companyName")
 	private String companyName;

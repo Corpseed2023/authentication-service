@@ -22,10 +22,6 @@ public class CityServiceImpl  implements CityService {
     @Autowired
     private StatesRepository statesRepository;
 
-    @Override
-    public List<City> getAllCities() {
-        return cityRepository.findByIsEnable(true);
-    }
 
 
 
@@ -51,5 +47,13 @@ public class CityServiceImpl  implements CityService {
     public void deleteCity(Long id) {
 
         cityRepository.deleteById(id);
+    }
+
+    @Override
+    public List<City> getAllCitiesByStateId(Long stateId) {
+        States state = statesRepository.findById(stateId)
+                .orElseThrow(() -> new EntityNotFoundException("State not found"));
+
+        return cityRepository.findByStates(state);
     }
 }

@@ -17,11 +17,7 @@ public class CityController {
     @Autowired
     private CityService cityService;
 
-    @GetMapping
-    public ResponseEntity<List<City>> getAllStates() {
-        List<City> allCities = cityService.getAllCities();
-        return new ResponseEntity<>(allCities, HttpStatus.OK);
-    }
+
     @PostMapping("/saveCities")
     public ResponseEntity<List<City>> createOrUpdateCities(@RequestBody List<String> citiesName, @RequestParam Long stateId) {
         List<City> savedCities = cityService.createOrUpdateCities(citiesName, stateId);
@@ -34,4 +30,10 @@ public class CityController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
+    @GetMapping("/getAllCities")
+    public ResponseEntity<List<City>> getAllCities(@RequestParam Long stateId) {
+        List<City> cities = cityService.getAllCitiesByStateId(stateId);
+        return ResponseEntity.ok(cities);
+    }
 }
