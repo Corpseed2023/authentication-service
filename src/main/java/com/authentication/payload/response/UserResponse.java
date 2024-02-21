@@ -1,12 +1,13 @@
 package com.authentication.payload.response;
 
-
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Builder
@@ -36,6 +37,6 @@ public class UserResponse {
 
     private Long userId;
 
-    public UserResponse() {
-    }
+    private List<String> roles;
+
 }

@@ -6,12 +6,11 @@ import com.authentication.payload.request.UserRequest;
 import com.authentication.payload.response.ResponseEntity;
 import com.authentication.payload.response.UserResponse;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 
 public interface UserService {
 
-    ResponseEntity<?> signupUser(SignupRequest signupRequest, HttpServletRequest httpServletRequest);
+    ResponseEntity<?> signupUser(SignupRequest signupRequest);
 
     ResponseEntity createUser(UserRequest userRequest);
 
@@ -21,11 +20,12 @@ public interface UserService {
 
     void resetPassword(String email, String newPassword);
 
-    UserResponse createTeamMemberUser(UserRequest userRequest) throws MalformedURLException;
+    ResponseEntity<UserResponse> createTeamMemberUser(UserRequest userRequest) throws MalformedURLException;
 
-    User getUserById(Long userId);
+    UserResponse getUserById(Long userId);
 
     ResponseEntity<?> updateUser(Long userId, UserRequest updatedUserRequest);
 
-    ResponseEntity<?> updateIsAssociatedAndIsSubscribe(Long userId, boolean isAssociated, boolean isSubscribed);
-}
+    ResponseEntity<?> updateIsAssociated(Long userId, boolean isAssociated);
+
+    ResponseEntity<?> updateIsAssociatedAndIsSubscribe(Long userId, boolean isAssociated, boolean isSubscribed);}

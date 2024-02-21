@@ -36,7 +36,9 @@ public class WebSecurityConfig {
             "/api/auth/user/updateIsAssociated",
             "/companyServices/**",
             "/api/auth/user/**","/companyServices/**",
-            "/company/**","/api/auth/user/createTeamMember"
+            "/company/**","/api/auth/user/createTeamMember",
+            "/api/auth/user","/companyServices/**",
+            "/company/**","/compliance/company/**"
     };
 
     @Bean
@@ -76,5 +78,25 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
+    public void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/api/**").permitAll()
+                .antMatchers("/").access("hasRole('USER')")
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .and()
+                .formLogin()
+                .loginProcessingUrl("/login") // link to submit username-password
+                .loginPage("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error")
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/403");
+    }
+
+
 
 }

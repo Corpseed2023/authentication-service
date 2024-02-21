@@ -1,6 +1,7 @@
 package com.authentication.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
@@ -9,8 +10,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +24,7 @@ public class  Roles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
 
+    @ApiModelProperty(hidden = true)
     private Long id ;
 
     @NotNull

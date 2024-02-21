@@ -13,5 +13,7 @@ public interface RoleRepository extends JpaRepository<Roles,Long> {
 
     @Query(value = "SELECT * FROM roles r WHERE r.role IN (:rolesList)", nativeQuery = true)
     Set<Roles> findRoleList(List<String> rolesList);
-    Roles findByRole(String subscriber);
+
+
+    Roles findByRole(String roleName);
 }

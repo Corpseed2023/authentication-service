@@ -24,12 +24,9 @@ public class  User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "uuid", unique = true, nullable = false)
-	private String uuid;
-	
 	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@Column(name = "last_name")
 	private String lastName;
 
@@ -38,19 +35,19 @@ public class  User {
 	@NotNull(message = "Email must not be null")
 	private String email;
 
-//	@Size(min = 10, max = 13, message = "Mobile length should be 10 to 13 digits")
+	//	@Size(min = 10, max = 13, message = "Mobile length should be 10 to 13 digits")
 	private String mobile;
-	
+
 	@Size(min = 6,message = "Password length should be minimum 6.")
 	@NotNull(message = "Password You Can't be null !!")
 	@NotBlank(message = "Please enter user password !!")
 	private String password;
-	
+
 	private String designation;
 
 	@Column(name = "resource_type")
 	private String resourceType;
-	
+
 
 	@Column(name = "created_at")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -59,7 +56,7 @@ public class  User {
 	@Column(name = "updated_at")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedAt;
-	
+
 	@Column(length = 1,name="is_enable",columnDefinition = "tinyint(1) default 1")
 	@Comment(value = "1 : Active, 0 : Inactive")
 	private boolean isEnable;
@@ -75,22 +72,20 @@ public class  User {
 	@Comment(value = "1 : User have company, 0 : User do not have Company ")
 	private boolean isAssociated = false;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subscription")
 	private Subscription subscription;
 
+	private boolean isSubscribed;
+
 	private Long companyId;
-
-	private boolean emailSent;
-
-	@Comment(value = "1 : User is Subscriber, 0 : User do not have subscription ")
-	private boolean isSubscribed = false;
-
-	@Column(name = "remote_address")
-	private String remoteAddress;
 
 
 	public Set<Roles> getRoles() {
 		return roles;
 	}
+
+
+
 }
