@@ -183,7 +183,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     private CompanyResponseDetails mapToCompanyResponse(Company company) {
         if (!company.isEnable()) {
-            // Skip disabled companies
             return null;
         }
 
