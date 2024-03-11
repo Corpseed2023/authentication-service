@@ -1,8 +1,13 @@
 package com.authentication.service.companyService;
 
-import com.authentication.dto.companyDto.CompanyResponseType;
+
+import com.authentication.dto.companyDto.CompanyTypeResponse;
 import com.authentication.dto.companyDto.CompanyTypeRequest;
+import java.util.List;
 
 public interface CompanyServiceType {
-    CompanyResponseType createCompanyType(CompanyTypeRequest companyTypeRequest, Long userId);
+
+    CompanyTypeResponse createCompanyType(CompanyTypeRequest companyTypeRequest, Long userId);
+
+    List<String> getAllCompanyTypeNames();
 }

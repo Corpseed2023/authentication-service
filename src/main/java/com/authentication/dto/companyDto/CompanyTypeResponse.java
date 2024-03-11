@@ -9,8 +9,9 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyTypeRequest {
+public class CompanyTypeResponse {
 
+    private Long id;
     private String companyTypeName;
     private Date createdAt;
     private Date updatedAt;

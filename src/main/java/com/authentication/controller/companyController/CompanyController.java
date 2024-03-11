@@ -2,14 +2,12 @@ package com.authentication.controller.companyController;
 
 
 import com.authentication.dto.companyDto.*;
-import com.authentication.model.companyModel.CompanyType;
 import com.authentication.service.companyService.CompanyService;
 import com.authentication.service.companyService.CompanyServiceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
@@ -44,8 +42,7 @@ public class CompanyController {
                                          @RequestParam Long companyId, Long userId) {
         return companyService.updateCompany(companyRequest,companyId,userId);
     }
-//
-//
+
     @DeleteMapping("/removeCompany")
     public ResponseEntity<String> disableCompany(@RequestParam Long id , @RequestParam Long userId) {
         try {
@@ -67,14 +64,6 @@ public class CompanyController {
         return companyService.getCompanyData(companyId);
     }
 
-
-    @PostMapping("/addCompanyType")
-    public ResponseEntity<CompanyResponseType> createCompany(@RequestBody CompanyTypeRequest companyTypeRequest ,
-                                                     @RequestParam Long userId)  {
-
-        CompanyResponseType companyResponseType = createCompanyType.createCompanyType(companyTypeRequest,userId);
-        return new ResponseEntity<>(companyResponseType, HttpStatus.CREATED);
-    }
 
 
 }

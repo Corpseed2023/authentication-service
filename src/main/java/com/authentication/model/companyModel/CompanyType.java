@@ -14,7 +14,7 @@ import java.util.Date;
 public class CompanyType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String companyTypeName;
@@ -31,13 +31,8 @@ public class CompanyType {
     @Comment(value = "1 : Active, 0 : Inactive")
     private boolean isEnable;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
     @Column(name = "user_id")
     private Long userId;
-
-
-
 
 
 
